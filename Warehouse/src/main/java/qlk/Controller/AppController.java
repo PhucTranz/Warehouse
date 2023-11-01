@@ -1,19 +1,19 @@
 package qlk.Controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlk.MyUserDetails;
-import qlk.Service.TaiKhoanService;
+import qlk.Service.QuanLyKhoService;
 
 @Controller
 public class AppController {
 	@Autowired
-	private TaiKhoanService taiKhoanservice;
-	
+	private QuanLyKhoService qlkService;
 	//Hien thi trang login
 	@RequestMapping("/login")
 	public String viewLoginPage(Model model) {
@@ -29,16 +29,20 @@ public class AppController {
 	
 	//Hien thi trang chu
 	@RequestMapping("/home")
-	public String viewHomePage(Model model) {
-		String role="";
-		try {
-			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			role = u.getRole();
-		}catch(Exception e) {
-			;
-		}
-		if(role.equals("ROLE_ADMIN"))
-			return "home";
-		return "sthome";
+	public String viewHomePage(Model model, HttpServletRequest request, HttpSession session) {
+//		String role="";
+//		try {
+//			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//			role = u.getRole();
+//		}catch(Exception e) {
+//			;
+//		}
+//		if(role.equals("ROLE_ADMIN"))
+//			return "home";
+//		return "sthome";
+		String name = qlkService.getByEmail(request.getUserPrincipal().getName()).getHoten();
+		session.setAttribute("name", name);
+		System.out.println(session.getAttribute("name"));
+		return "home";
 	}
 }
