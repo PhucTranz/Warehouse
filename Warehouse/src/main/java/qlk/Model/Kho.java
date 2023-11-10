@@ -10,16 +10,11 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "quanlykho")
-public class QuanLyKho {
+@Table(name = "kho")
+public class Kho {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int manv;
-	private String hoten;
-	private String ngaysinh;
-	private String gioitinh;
-	private String sdt;
+	private int makho;
+	private String tenkho;
 	private String diachi;
-	private int luong;
-	private String email;
 }

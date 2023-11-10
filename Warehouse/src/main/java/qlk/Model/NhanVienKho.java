@@ -10,8 +10,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "quanlykho")
-public class QuanLyKho {
+@Table(name = "nhanvienkho")
+public class NhanVienKho {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int manv;
@@ -20,6 +20,7 @@ public class QuanLyKho {
 	private String gioitinh;
 	private String sdt;
 	private String diachi;
+	private String vitrilam;
 	private int luong;
 	private String email;
 }

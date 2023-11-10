@@ -36,18 +36,6 @@
 
           <div class="clearfix"></div>
 
-          <!-- menu profile quick info -->
-          <div class="profile clearfix">
-            <div class="userImageFromCookieByBase64 profile_pic">
-              <img src="">
-            </div>
-            <div class="profile_info">
-              <span>Welcome,</span>
-              <h2>[[${#httpServletRequest.remoteUser}]]</h2>
-            </div>
-          </div>
-          <!-- /menu profile quick info -->
-
           <br />
 
           <!-- sidebar menu -->
@@ -134,7 +122,7 @@
             <a data-toggle="tooltip" data-placement="top" title="Lock">
               <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" href="logout">
+            <a data-toggle="tooltip" data-placement="top" title="Logout" href="/doLogout">
               <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
           </div>
@@ -153,83 +141,14 @@
               <li class="nav-item dropdown open" style="padding-left: 15px;">
                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown"
                   data-toggle="dropdown" aria-expanded="false">
-                  <img class="userImageFromCookieByBase64" src="" alt="">[[${#httpServletRequest.remoteUser}]]
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+</svg> <span th:text="${session.name}"></span> 
                 </a>
                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="javascript:;"> Profile</a>
-                  <a class="dropdown-item" href="javascript:;">
-                    <span class="badge bg-red pull-right">50%</span>
-                    <span>KPI</span>
-                  </a>
-                  <a class="dropdown-item" href="javascript:;">Help</a>
-                  <a class="dropdown-item" href="logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                  <a class="dropdown-item" href="/doLogout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                 </div>
-              </li>
-
-              <li role="presentation" class="nav-item dropdown open">
-                <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown"
-                  aria-expanded="false">
-                  <i class="fa fa-envelope-o"></i>
-                  <span class="badge bg-green">6</span>
-                </a>
-                <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                  <li class="nav-item">
-                    <a class="dropdown-item">
-                      <span class="image"><img src="" alt="Profile Image" /></span>
-                      <span>
-                        <span>John Smith</span>
-                        <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                      </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="dropdown-item">
-                      <span class="image"><img src="" alt="Profile Image" /></span>
-                      <span>
-                        <span>John Smith</span>
-                        <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                      </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="dropdown-item">
-                      <span class="image"><img src="" alt="Profile Image" /></span>
-                      <span>
-                        <span>John Smith</span>
-                        <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                      </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="dropdown-item">
-                      <span class="image"><img src="" alt="Profile Image" /></span>
-                      <span>
-                        <span>John Smith</span>
-                        <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                      </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <div class="text-center">
-                      <a class="dropdown-item">
-                        <strong>See All Alerts</strong>
-                        <i class="fa fa-angle-right"></i>
-                      </a>
-                    </div>
-                  </li>
-                </ul>
               </li>
             </ul>
           </nav>
