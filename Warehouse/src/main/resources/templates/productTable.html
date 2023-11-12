@@ -2,7 +2,23 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate = "~{mainlayout}">
 <head>
-    
+    <!-- Bootstrap -->
+    <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- NProgress -->
+    <link th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
+    <!-- iCheck -->
+    <link th:href="@{/vendors/iCheck/skins/flat/green.css}" rel="stylesheet">
+    <!-- Datatables -->
+    <link th:href="@{/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
+            
 </head>
 <body>
     <div layout:fragment="content" >
@@ -71,53 +87,30 @@
                                 colspan="1"
                                 style="width: 5%;"
                                 aria-sort="ascending"
-                                aria-label="First name: activate to sort column descending"
-                              >Barcode</th>
+                              >Id</th>
                               <th
                                 class="sorting"
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 20%;"
-                                aria-label="Last name: activate to sort column ascending"
+                                style="width: 25%;"
+                                aria-label="Office: activate to sort column ascending"
                               >Name</th>
                               <th
-                                class="sorting"
+                                tabindex="0"
+                                aria-controls="datatable-responsive"
+                                rowspan="1"
+                                colspan="1"
+                                style="width: 25%;"
+                              >Image</th>
+                              <th
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 5%;"
-                                aria-label="Position: activate to sort column ascending"
-                              >OG Price</th>
-                              <th
-                                class="sorting"
-                                tabindex="0"
-                                aria-controls="datatable-responsive"
-                                rowspan="1"
-                                colspan="1"
-                                style="width: 5%;"
-                                aria-label="Office: activate to sort column ascending"
-                              >SL Price</th>
-                              <th
-                                class="sorting"
-                                tabindex="0"
-                                aria-controls="datatable-responsive"
-                                rowspan="1"
-                                colspan="1"
-                                style="width: 15%;"
-                                aria-label="Age: activate to sort column ascending"
-                              >Category</th>
-                              <th
-                                class="sorting"
-                                tabindex="0"
-                                aria-controls="datatable-responsive"
-                                rowspan="1"
-                                colspan="1"
-                                style="width: 15%;"
-                                aria-label="Start date: activate to sort column ascending"
-                              >Created</th>
+                              >Size</th>
                               <th
                                 class="sorting"
                                 tabindex="0"
@@ -125,7 +118,6 @@
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 5%;"
-                                aria-label="Salary: activate to sort column ascending"
                               >Quantity</th>
                               <th
                                 class="sorting"
@@ -133,40 +125,31 @@
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 5%;"
-                                aria-label="Extn.: activate to sort column ascending"
-                              >Sold</th>
+                                style="width: 15%;"
+                              >Price</th>
                               <th
-                                class="sorting"
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 25%; display: none;"
-                                aria-label="E-mail: activate to sort column ascending"
+                                style="width: 20%;"
                               >Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            
-                            {{#each productTableData}}
-                              <tr role="row" class="odd" data-barcode="{{barcode}}">
-                                <td class="sorting_1 {{barcode}}" tabindex="0">{{barcode}}</td>
-                                <td class="{{barcode}}">{{name}}</td>
-                                <td class="{{barcode}}">{{originalPrice}}</td>
-                                <td class="{{barcode}}">{{salePrice}}</td>
-                                <td class="{{barcode}}">{{categoryName}}</td>
-                                <td class="{{barcode}}" id="date{{barcode}}" data="{{date}}">{{dateCreated}}</td>
-                                <td class="{{barcode}}">{{qty}}</td>
-                                <td class="{{barcode}}">{{sold}}</td>
-                                <td
-                                  style="display: none;"
-                                >
-                                  <button data-toggle="modal" data-target="#delete" data="{{barcode}}" class="btn-delete-product">Delete</button>
-                                  <button data-toggle="modal" data-target="#editform" id="{{barcode}}" class="btn-edit-product">Edit</button>
+                              <tr th:each="p : ${listProduct}" role="row" class="odd" th:data-barcode="${p.masp}">
+                                <td th:text="${p.masp}" th:class="'sorting_1 ' + ${p.masp}" tabindex="0"></td>
+                                <td th:text="${p.tensp}" th:class="${p.masp}"></td>
+                                <td th:class="${p.masp}"><img class="imgProductTB" th:src="@{'/images/'+${p.hinhanh}}"></td>
+                                <td th:text="${p.size}" th:class="${p.masp}"></td>
+                                <td th:text="${p.soluong}" th:class="${p.masp}"></td>
+                                <td th:text="${p.gia}" th:class="${p.masp}" data="{{date}}"></td>
+                                <td>
+                                	<button><a style="color:black;" th:href="'product/'+${p.masp}">Details</a></button>
+                                  	<button data-toggle="modal" data-target="#delP" th:data="${p.masp}" class="btn-delete-product">Delete</button>
+                                  	<button data-toggle="modal" data-target="#editform" th:id="${p.masp}" class="btn-edit-product">Edit</button>
                                 </td>
                               </tr>
-                            {{/each}}
                         </table>
                       </div>
                     </div>
@@ -176,6 +159,28 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="delP" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lable">Are you sure to delete this product?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <p id="d-data"></p>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-warning confirmedDeletedProduct"><a id="delLink" style="color:black;" href="#">Yes</a></button>
       </div>
     </div>
   </div>
@@ -194,7 +199,7 @@
 
         <form>
           <div class="form-group">
-            <label for="barcode">Barcode</label>
+            <label for="barcode">Id</label>
             <input type="text" class="form-control" required="required" readonly="readonly" id="barcode" name="barcode">
           </div>
            <div class="form-group">
@@ -202,29 +207,20 @@
             <input type="text" class="form-control" autocomplete="off" id="name" name="name">
           </div>
            <div class="form-group">
-            <label for="ogPrice">OG Price</label>
+            <label for="ogPrice">Image</label>
             <input type="text" class="form-control" id="ogPrice" name="originalPrice">
           </div>
            <div class="form-group">
-            <label for="slPrice">SL Price</label>
+            <label for="slPrice">Size</label>
             <input type="number" class="form-control" id="slPrice" name="salePrice">
           </div>
            <div class="form-group">
-            <label for="category">Category</label>
+            <label for="category">Quantity</label>
             <input type="text" class="form-control" id="category" name="category">
           </div>
            <div class="form-group">
-            <label for="created">Created</label>
+            <label for="created">Price</label>
             <input type="datetime-local" class="form-control" id="created" name="dateCreated" value="2023-10-24T06:59">
-          </div>
-           <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number" class="form-control" required="required" readonly="readonly"  id="quantity" name="qty">
-          </div>
-           <div class="form-group">
-            <label for="sold">Sold</label>
-            <input type="number" class="form-control" required="required" readonly="readonly"  id="sold" name="sold">
-          </div>
         </form>
         
       </div>
@@ -237,27 +233,36 @@
 </div>
 
 
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="lable">Are you sure to delete this product?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p id="d-data"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-warning confirmedDeletedProduct">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
+<script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+<!-- NProgress -->
+<script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+<!-- Datatables -->
+<script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.flash.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+<script th:src="@{/vendors/datatables.net-scroller/js/dataTables.scroller.min.js}"></script>
+<script th:src="@{/vendors/jszip/dist/jszip.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
+<script th:src="@{/javascripts/custom.js}"></script>
 	</div>
+
 </body>
 </html>
+
 
 

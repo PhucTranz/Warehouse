@@ -9,20 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>CellphoneZ </title>
-
-
-<!-- Bootstrap -->
-	<link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
-	<!-- Font Awesome -->
-	<link th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
-	<!-- NProgress -->
-	<link th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
-	<!-- bootstrap-progressbar -->
-	<link th:href="@{/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css}" rel="stylesheet">
-	<!-- bootstrap-daterangepicker -->
-	<link th:href="@{/vendors/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-  <!-- Custom Theme Style -->
-  <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -46,10 +32,8 @@
                   <li><a><i class="fa fa-bar-chart"></i> Dashboard</a></li>
                   <li><a><i class="fa fa-laptop"></i> Products <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{#if pathIsLevelTwo}}../{{/if}}products">View all products</a></li>
-                      <li><a href="{{#if pathIsLevelTwo}}../{{/if}}products/create">Create a product</a></li>
-                      <li><a href="{{#if pathIsLevelTwo}}../{{/if}}categories">View all categories</a></li>
-                      <li><a href="{{#if pathIsLevelTwo}}../{{/if}}categories/create">Create a category</a></li>
+                      <li><a href="/product">View all products</a></li>
+                      <li><a href="/create_product">Create a product</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-home"></i> Warehouse <span class="fa fa-chevron-down"></span></a>
@@ -164,44 +148,6 @@
     
   </div>
   </div>
-
-<!-- jQuery -->
-            <script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
-            <!-- Bootstrap -->
-            <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-            <!-- FastClick -->
-            <script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
-            <!-- NProgress -->
-            <script th:src="@{/vendors/nprogress/nprogress.js}"></script>
-            <!-- Chart.js -->
-            <script th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
-            <!-- jQuery Sparklines -->
-            <script th:src="@{/vendors/jquery-sparkline/dist/jquery.sparkline.min.js}"></script>
-            <!-- morris.js -->
-            <script th:src="@{/vendors/raphael/raphael.min.js}"></script>
-            <script th:src="@{/vendors/morris.js/morris.min.js}"></script>
-            <!-- gauge.js -->
-            <script th:src="@{/vendors/gauge.js/dist/gauge.min.js}"></script>
-            <!-- bootstrap-progressbar -->
-            <script th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
-            <!-- Skycons -->
-            <script th:src="@{/vendors/skycons/skycons.js}"></script>
-            <!-- Flot -->
-            <script th:src="@{/vendors/Flot/jquery.flot.js}"></script>
-            <script th:src="@{/vendors/Flot/jquery.flot.pie.js}"></script>
-            <script th:src="@{/vendors/Flot/jquery.flot.time.js}"></script>
-            <script th:src="@{/vendors/Flot/jquery.flot.stack.js}"></script>
-            <script th:src="@{/vendors/Flot/jquery.flot.resize.js}"></script>
-            <!-- Flot plugins -->
-            <script th:src="@{/vendors/flot.orderbars/js/jquery.flot.orderBars.js}"></script>
-            <script th:src="@{/vendors/flot-spline/js/jquery.flot.spline.min.js}"></script>
-            <script th:src="@{/vendors/flot.curvedlines/curvedLines.js}"></script>
-            <!-- DateJS -->
-            <script th:src="@{/vendors/DateJS/build/date.js}"></script>
-            <!-- bootstrap-daterangepicker -->
-            <script th:src="@{/vendors/moment/min/moment.min.js}"></script>
-            <script th:src="@{/vendors/bootstrap-daterangepicker/daterangepicker.js}"></script>
-
 <!-- Custom Theme Scripts -->
 <script th:src="@{/javascripts/custom.js}"></script>
 

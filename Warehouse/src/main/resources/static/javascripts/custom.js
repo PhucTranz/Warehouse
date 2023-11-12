@@ -153,6 +153,28 @@ function init_sidebar() {
 // /Sidebar
 
 
+function setImagesFromCookie() {
+    // Lấy giá trị của cookie có tên "userImge"
+    const userImageCookie = decodeURIComponent(
+        document.cookie.replace(
+            /(?:(?:^|.*;\s*)userImge\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1"
+        )
+    );
+
+    if (userImageCookie) {
+        // Tìm tất cả các thẻ img có class "userImageFromCookieByBase64"
+        const userImages = document.querySelectorAll('.userImageFromCookieByBase64');
+
+        // Gán giá trị cookie vào thuộc tính src của các thẻ img
+        userImages.forEach(img => {
+            img.src = userImageCookie;
+        });
+    }
+}
+
+// Gọi hàm để thực hiện việc cài đặt ảnh từ cookie
+setImagesFromCookie();
 
 // Panel toolbox
 $(document).ready(function () {
@@ -714,51 +736,51 @@ function init_chart_doughnut() {
 
     console.log('init_chart_doughnut');
 
-    if ($('.canvasDoughnut').length) {
+    // if ($('.canvasDoughnut').length) {
 
-        var chart_doughnut_settings = {
-            type: 'doughnut',
-            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-            data: {
-                labels: [
-                    "Symbian",
-                    "Blackberry",
-                    "Other",
-                    "Android",
-                    "IOS"
-                ],
-                datasets: [{
-                    data: [15, 20, 30, 10, 30],
-                    backgroundColor: [
-                        "#BDC3C7",
-                        "#9B59B6",
-                        "#E74C3C",
-                        "#26B99A",
-                        "#3498DB"
-                    ],
-                    hoverBackgroundColor: [
-                        "#CFD4D8",
-                        "#B370CF",
-                        "#E95E4F",
-                        "#36CAAB",
-                        "#49A9EA"
-                    ]
-                }]
-            },
-            options: {
-                legend: false,
-                responsive: false
-            }
-        }
+    //     var chart_doughnut_settings = {
+    //         type: 'doughnut',
+    //         tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+    //         data: {
+    //             labels: [
+    //                 "Symbian",
+    //                 "Blackberry",
+    //                 "Other",
+    //                 "Android",
+    //                 "IOS"
+    //             ],
+    //             datasets: [{
+    //                 data: [15, 20, 30, 10, 30],
+    //                 backgroundColor: [
+    //                     "#BDC3C7",
+    //                     "#9B59B6",
+    //                     "#E74C3C",
+    //                     "#26B99A",
+    //                     "#3498DB"
+    //                 ],
+    //                 hoverBackgroundColor: [
+    //                     "#CFD4D8",
+    //                     "#B370CF",
+    //                     "#E95E4F",
+    //                     "#36CAAB",
+    //                     "#49A9EA"
+    //                 ]
+    //             }]
+    //         },
+    //         options: {
+    //             legend: false,
+    //             responsive: false
+    //         }
+    //     }
 
-        $('.canvasDoughnut').each(function () {
+    //     $('.canvasDoughnut').each(function () {
 
-            var chart_element = $(this);
-            var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
+    //         var chart_element = $(this);
+    //         var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
 
-        });
+    //     });
 
-    }
+    // }
 
 }
 
@@ -1899,8 +1921,8 @@ function init_daterangepicker() {
     var optionSet1 = {
         startDate: moment().subtract(29, 'days'),
         endDate: moment(),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2015',
+        minDate: '01/01/2022',
+        maxDate: '12/31/2023',
         dateLimit: {
             days: 60
         },
@@ -1960,6 +1982,252 @@ function init_daterangepicker() {
     });
 
 }
+
+$(document).ready(function () {
+    $('#reportrange span').on('DOMSubtreeModified', function () {
+        if ($(this).text() == "") {
+
+        } else {
+            $.post(`/home/getRevenuesOnPickedTime`, {
+                dateString: $(this).text()
+            }, function (data) {
+                if (data === "Fail") {
+
+                } else {
+                    const tbody = $(".report-content table tbody");
+                    tbody.empty();
+                    JSON.parse(data).forEach((item) => {
+                        tbody.append(
+                            `<tr>
+                                <td>${item._id}</td>
+                                <td>` + item.saler.split("<<>>")[0] + `</td>
+                                <td>` + item.total.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }) + `</td>
+                            </tr>`
+                        );
+                    });
+                    const total = JSON.parse(data).reduce((acc, item) => {
+                        return acc + parseInt(item.total);
+                    }, 0);
+                    $(".report-content table tfoot td:last-child strong").text(total.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }))
+                }
+            })
+
+            $.post(`/home/getSalerOnPickedTime`, {
+                dateString: $(this).text()
+            }, function (data) {
+                if (data === "Fail") {
+
+                } else {
+                    const tbody = $(".report-content-wholesale table tbody");
+                    tbody.empty();
+                    JSON.parse(data).forEach((item) => {
+                        tbody.append(
+                            `<tr>
+                                <td>` + item.saler.split("<<>>")[0] + `</td>
+                                <td>` + item.totalBills + `</td>
+                                <td>` + item.totalSales.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }) + `</td>
+                            </tr>`
+                        );
+                    });
+                    const total = JSON.parse(data).reduce((acc, item) => {
+                        return acc + parseInt(item.totalBills);
+                    }, 0);
+                    $(".report-content-wholesale table tfoot td:last-child strong").text(total + " bills")
+                }
+            })
+
+            $.post(`/home/getDataForChart`, {
+                dateString: $(this).text()
+            }, function (data) {
+                if (data === "Fail") {
+
+                } else {
+                    const options = {
+                        series: {
+                            lines: {
+                                show: true
+                            },
+                            points: {
+                                show: true
+                            }
+                        },
+                        grid: {
+                            borderWidth: 1,
+                            borderColor: '#ddd'
+                        },
+                        xaxis: {
+                            type: 'category',
+                            categories: [],
+                            tickAmount: undefined,
+                            tickPlacement: 'between',
+                        },
+                        yaxis: {
+                            tickFormatter: function (value, axis) {
+                                // Định dạng số tiền
+                                return value.toLocaleString('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                });
+                            }
+                        }
+                    };
+                    const dataToPlot = []
+                    const category = []
+
+
+                    JSON.parse(data).map(item => {
+                        const dateParts = item.date.split('-');
+                        const formattedDate = dateParts[2];
+                        category.push(dateParts)
+                        dataToPlot.push([formattedDate, item.totalRevenue]);
+                    });
+
+                    options.xaxis.categories = category
+
+                    $.plot($("#chart_plot_03"), [{
+                        label: 'Amount',
+                        data: dataToPlot.reverse()
+                    }], options);
+                    console.log(dataToPlot)
+                }
+            })
+        }
+
+    })
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname === '/logout') {
+        localStorage.clear();
+    }
+
+    var image = localStorage.getItem("image");
+    var name = localStorage.getItem("name");
+
+    if (image && name) {
+        $(".userImageFromCookieByBase64").attr("src", image);
+        $(".profile_info h2").text(name);
+    } else {
+    }
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname === '/home') {
+        $.get(`/home/getDashboardData`, {}, function (data) {
+            if (data === "Fail") {
+
+            } else {
+                const dashData = JSON.parse(data);
+                $('.top_tiles .tile:nth-child(1) h2').text(dashData.totalBills);
+                $('.top_tiles .tile:nth-child(2) h2').text(dashData.dailyAmount.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }));
+                $('.top_tiles .tile:nth-child(3) h2').text(dashData.monthlyAmount.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }));
+                $('.top_tiles .tile:nth-child(4) h2').text(dashData.todayBills);
+            }
+        })
+
+        $.get(`/home/getTheMostSale`, {}, function (data) {
+            if (data === "Fail") {
+
+            } else {
+                const leftCol = [];
+                const rightCol = [];
+                JSON.parse(data).forEach(value => {
+                    leftCol.push(value[0]);
+                    rightCol.push(value[1]);
+                });
+                console.log(leftCol, rightCol)
+                var chart_doughnut_settings = {
+                    type: 'doughnut',
+                    tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+                    data: {
+                        labels: leftCol,
+                        datasets: [{
+                            data: rightCol,
+                            backgroundColor: [
+                                "#BDC3C7",
+                                "#9B59B6",
+                                "#E74C3C",
+                                "#26B99A",
+                                "#3498DB"
+                            ],
+                            hoverBackgroundColor: [
+                                "#CFD4D8",
+                                "#B370CF",
+                                "#E95E4F",
+                                "#36CAAB",
+                                "#49A9EA"
+                            ]
+                        }]
+                    },
+                    options: {
+                        legend: false,
+                        responsive: false
+                    }
+                }
+
+                $('.canvasDoughnut').each(function () {
+
+                    var chart_element = $(this);
+                    var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
+
+                });
+
+                const newData = JSON.parse(data)
+
+                $('.tile_info tbody tr').each(function (index) {
+                    const values = newData[index];
+
+                    $(this).find('td:first p').text(values[0].slice(0, 25) + "...");
+
+                    $(this).find('td:last').text(values[1]);
+                });
+            }
+        })
+
+        $.get(`/home/getBestSeller`, {}, function (data) {
+            if (data === "Fail") {
+
+            } else {
+                Morris.Bar({
+                    element: 'graph_bar',
+                    data: JSON.parse(data),
+                    xkey: 'saler',
+                    ykeys: ['totalBills'],
+                    labels: ['Amounts'],
+                    barRatio: 0.4,
+                    barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+                    xLabelAngle: 35,
+                    hideHover: 'auto',
+                    resize: true
+                });
+            }
+        })
+
+        $.get(`/home/getUserData`, {}, function (data) {
+            if (data === "Fail") {
+
+            } else {
+                localStorage.setItem("image", JSON.parse(data).image);
+                localStorage.setItem("name", JSON.parse(data).name);
+            }
+        })
+    }
+});
 
 function init_daterangepicker_right() {
 
@@ -2911,323 +3179,324 @@ function init_DataTables() {
 
 /* CHART - MORRIS  */
 
-function init_morris_charts() {
 
-    if (typeof (Morris) === 'undefined') {
-        return;
-    }
-    console.log('init_morris_charts');
+// function init_morris_charts() {
 
-    if ($('#graph_bar').length) {
+//     if (typeof (Morris) === 'undefined') {
+//         return;
+//     }
+//     console.log('init_morris_charts');
 
-        Morris.Bar({
-            element: 'graph_bar',
-            data: [{
-                    device: 'iPhone 4',
-                    geekbench: 380
-                },
-                {
-                    device: 'iPhone 4S',
-                    geekbench: 655
-                },
-                {
-                    device: 'iPhone 3GS',
-                    geekbench: 275
-                },
-                {
-                    device: 'iPhone 5',
-                    geekbench: 1571
-                },
-                {
-                    device: 'iPhone 5S',
-                    geekbench: 655
-                },
-                {
-                    device: 'iPhone 6',
-                    geekbench: 2154
-                },
-                {
-                    device: 'iPhone 6 Plus',
-                    geekbench: 1144
-                },
-                {
-                    device: 'iPhone 6S',
-                    geekbench: 2371
-                },
-                {
-                    device: 'iPhone 6S Plus',
-                    geekbench: 1471
-                },
-                {
-                    device: 'Other',
-                    geekbench: 1371
-                }
-            ],
-            xkey: 'device',
-            ykeys: ['geekbench'],
-            labels: ['Geekbench'],
-            barRatio: 0.4,
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            xLabelAngle: 35,
-            hideHover: 'auto',
-            resize: true
-        });
+//     if ($('#graph_bar').length) {
 
-    }
+//         Morris.Bar({
+//             element: 'graph_bar',
+//             data: [{
+//                     device: 'iPhone 4',
+//                     geekbench: 380
+//                 },
+//                 {
+//                     device: 'iPhone 4S',
+//                     geekbench: 655
+//                 },
+//                 {
+//                     device: 'iPhone 3GS',
+//                     geekbench: 275
+//                 },
+//                 {
+//                     device: 'iPhone 5',
+//                     geekbench: 1571
+//                 },
+//                 {
+//                     device: 'iPhone 5S',
+//                     geekbench: 655
+//                 },
+//                 {
+//                     device: 'iPhone 6',
+//                     geekbench: 2154
+//                 },
+//                 {
+//                     device: 'iPhone 6 Plus',
+//                     geekbench: 1144
+//                 },
+//                 {
+//                     device: 'iPhone 6S',
+//                     geekbench: 2371
+//                 },
+//                 {
+//                     device: 'iPhone 6S Plus',
+//                     geekbench: 1471
+//                 },
+//                 {
+//                     device: 'Other',
+//                     geekbench: 1371
+//                 }
+//             ],
+//             xkey: 'device',
+//             ykeys: ['geekbench'],
+//             labels: ['Geekbench'],
+//             barRatio: 0.4,
+//             barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             xLabelAngle: 35,
+//             hideHover: 'auto',
+//             resize: true
+//         });
 
-    if ($('#graph_bar_group').length) {
+//     }
 
-        Morris.Bar({
-            element: 'graph_bar_group',
-            data: [{
-                    "period": "2016-10-01",
-                    "licensed": 807,
-                    "sorned": 660
-                },
-                {
-                    "period": "2016-09-30",
-                    "licensed": 1251,
-                    "sorned": 729
-                },
-                {
-                    "period": "2016-09-29",
-                    "licensed": 1769,
-                    "sorned": 1018
-                },
-                {
-                    "period": "2016-09-20",
-                    "licensed": 2246,
-                    "sorned": 1461
-                },
-                {
-                    "period": "2016-09-19",
-                    "licensed": 2657,
-                    "sorned": 1967
-                },
-                {
-                    "period": "2016-09-18",
-                    "licensed": 3148,
-                    "sorned": 2627
-                },
-                {
-                    "period": "2016-09-17",
-                    "licensed": 3471,
-                    "sorned": 3740
-                },
-                {
-                    "period": "2016-09-16",
-                    "licensed": 2871,
-                    "sorned": 2216
-                },
-                {
-                    "period": "2016-09-15",
-                    "licensed": 2401,
-                    "sorned": 1656
-                },
-                {
-                    "period": "2016-09-10",
-                    "licensed": 2115,
-                    "sorned": 1022
-                }
-            ],
-            xkey: 'period',
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            ykeys: ['licensed', 'sorned'],
-            labels: ['Licensed', 'SORN'],
-            hideHover: 'auto',
-            xLabelAngle: 60,
-            resize: true
-        });
+//     if ($('#graph_bar_group').length) {
 
-    }
+//         Morris.Bar({
+//             element: 'graph_bar_group',
+//             data: [{
+//                     "period": "2016-10-01",
+//                     "licensed": 807,
+//                     "sorned": 660
+//                 },
+//                 {
+//                     "period": "2016-09-30",
+//                     "licensed": 1251,
+//                     "sorned": 729
+//                 },
+//                 {
+//                     "period": "2016-09-29",
+//                     "licensed": 1769,
+//                     "sorned": 1018
+//                 },
+//                 {
+//                     "period": "2016-09-20",
+//                     "licensed": 2246,
+//                     "sorned": 1461
+//                 },
+//                 {
+//                     "period": "2016-09-19",
+//                     "licensed": 2657,
+//                     "sorned": 1967
+//                 },
+//                 {
+//                     "period": "2016-09-18",
+//                     "licensed": 3148,
+//                     "sorned": 2627
+//                 },
+//                 {
+//                     "period": "2016-09-17",
+//                     "licensed": 3471,
+//                     "sorned": 3740
+//                 },
+//                 {
+//                     "period": "2016-09-16",
+//                     "licensed": 2871,
+//                     "sorned": 2216
+//                 },
+//                 {
+//                     "period": "2016-09-15",
+//                     "licensed": 2401,
+//                     "sorned": 1656
+//                 },
+//                 {
+//                     "period": "2016-09-10",
+//                     "licensed": 2115,
+//                     "sorned": 1022
+//                 }
+//             ],
+//             xkey: 'period',
+//             barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             ykeys: ['licensed', 'sorned'],
+//             labels: ['Licensed', 'SORN'],
+//             hideHover: 'auto',
+//             xLabelAngle: 60,
+//             resize: true
+//         });
 
-    if ($('#graphx').length) {
+//     }
 
-        Morris.Bar({
-            element: 'graphx',
-            data: [{
-                    x: '2015 Q1',
-                    y: 2,
-                    z: 3,
-                    a: 4
-                },
-                {
-                    x: '2015 Q2',
-                    y: 3,
-                    z: 5,
-                    a: 6
-                },
-                {
-                    x: '2015 Q3',
-                    y: 4,
-                    z: 3,
-                    a: 2
-                },
-                {
-                    x: '2015 Q4',
-                    y: 2,
-                    z: 4,
-                    a: 5
-                }
-            ],
-            xkey: 'x',
-            ykeys: ['y', 'z', 'a'],
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            hideHover: 'auto',
-            labels: ['Y', 'Z', 'A'],
-            resize: true
-        }).on('click', function (i, row) {
-            console.log(i, row);
-        });
+//     if ($('#graphx').length) {
 
-    }
+//         Morris.Bar({
+//             element: 'graphx',
+//             data: [{
+//                     x: '2015 Q1',
+//                     y: 2,
+//                     z: 3,
+//                     a: 4
+//                 },
+//                 {
+//                     x: '2015 Q2',
+//                     y: 3,
+//                     z: 5,
+//                     a: 6
+//                 },
+//                 {
+//                     x: '2015 Q3',
+//                     y: 4,
+//                     z: 3,
+//                     a: 2
+//                 },
+//                 {
+//                     x: '2015 Q4',
+//                     y: 2,
+//                     z: 4,
+//                     a: 5
+//                 }
+//             ],
+//             xkey: 'x',
+//             ykeys: ['y', 'z', 'a'],
+//             barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             hideHover: 'auto',
+//             labels: ['Y', 'Z', 'A'],
+//             resize: true
+//         }).on('click', function (i, row) {
+//             console.log(i, row);
+//         });
 
-    if ($('#graph_area').length) {
+//     }
 
-        Morris.Area({
-            element: 'graph_area',
-            data: [{
-                    period: '2014 Q1',
-                    iphone: 2666,
-                    ipad: null,
-                    itouch: 2647
-                },
-                {
-                    period: '2014 Q2',
-                    iphone: 2778,
-                    ipad: 2294,
-                    itouch: 2441
-                },
-                {
-                    period: '2014 Q3',
-                    iphone: 4912,
-                    ipad: 1969,
-                    itouch: 2501
-                },
-                {
-                    period: '2014 Q4',
-                    iphone: 3767,
-                    ipad: 3597,
-                    itouch: 5689
-                },
-                {
-                    period: '2015 Q1',
-                    iphone: 6810,
-                    ipad: 1914,
-                    itouch: 2293
-                },
-                {
-                    period: '2015 Q2',
-                    iphone: 5670,
-                    ipad: 4293,
-                    itouch: 1881
-                },
-                {
-                    period: '2015 Q3',
-                    iphone: 4820,
-                    ipad: 3795,
-                    itouch: 1588
-                },
-                {
-                    period: '2015 Q4',
-                    iphone: 15073,
-                    ipad: 5967,
-                    itouch: 5175
-                },
-                {
-                    period: '2016 Q1',
-                    iphone: 10687,
-                    ipad: 4460,
-                    itouch: 2028
-                },
-                {
-                    period: '2016 Q2',
-                    iphone: 8432,
-                    ipad: 5713,
-                    itouch: 1791
-                }
-            ],
-            xkey: 'period',
-            ykeys: ['iphone', 'ipad', 'itouch'],
-            lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            labels: ['iPhone', 'iPad', 'iPod Touch'],
-            pointSize: 2,
-            hideHover: 'auto',
-            resize: true
-        });
+//     if ($('#graph_area').length) {
 
-    }
+//         Morris.Area({
+//             element: 'graph_area',
+//             data: [{
+//                     period: '2014 Q1',
+//                     iphone: 2666,
+//                     ipad: null,
+//                     itouch: 2647
+//                 },
+//                 {
+//                     period: '2014 Q2',
+//                     iphone: 2778,
+//                     ipad: 2294,
+//                     itouch: 2441
+//                 },
+//                 {
+//                     period: '2014 Q3',
+//                     iphone: 4912,
+//                     ipad: 1969,
+//                     itouch: 2501
+//                 },
+//                 {
+//                     period: '2014 Q4',
+//                     iphone: 3767,
+//                     ipad: 3597,
+//                     itouch: 5689
+//                 },
+//                 {
+//                     period: '2015 Q1',
+//                     iphone: 6810,
+//                     ipad: 1914,
+//                     itouch: 2293
+//                 },
+//                 {
+//                     period: '2015 Q2',
+//                     iphone: 5670,
+//                     ipad: 4293,
+//                     itouch: 1881
+//                 },
+//                 {
+//                     period: '2015 Q3',
+//                     iphone: 4820,
+//                     ipad: 3795,
+//                     itouch: 1588
+//                 },
+//                 {
+//                     period: '2015 Q4',
+//                     iphone: 15073,
+//                     ipad: 5967,
+//                     itouch: 5175
+//                 },
+//                 {
+//                     period: '2016 Q1',
+//                     iphone: 10687,
+//                     ipad: 4460,
+//                     itouch: 2028
+//                 },
+//                 {
+//                     period: '2016 Q2',
+//                     iphone: 8432,
+//                     ipad: 5713,
+//                     itouch: 1791
+//                 }
+//             ],
+//             xkey: 'period',
+//             ykeys: ['iphone', 'ipad', 'itouch'],
+//             lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             labels: ['iPhone', 'iPad', 'iPod Touch'],
+//             pointSize: 2,
+//             hideHover: 'auto',
+//             resize: true
+//         });
 
-    if ($('#graph_donut').length) {
+//     }
 
-        Morris.Donut({
-            element: 'graph_donut',
-            data: [{
-                    label: 'Jam',
-                    value: 25
-                },
-                {
-                    label: 'Frosted',
-                    value: 40
-                },
-                {
-                    label: 'Custard',
-                    value: 25
-                },
-                {
-                    label: 'Sugar',
-                    value: 10
-                }
-            ],
-            colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            formatter: function (y) {
-                return y + "%";
-            },
-            resize: true
-        });
+//     if ($('#graph_donut').length) {
 
-    }
+//         Morris.Donut({
+//             element: 'graph_donut',
+//             data: [{
+//                     label: 'Jam',
+//                     value: 25
+//                 },
+//                 {
+//                     label: 'Frosted',
+//                     value: 40
+//                 },
+//                 {
+//                     label: 'Custard',
+//                     value: 25
+//                 },
+//                 {
+//                     label: 'Sugar',
+//                     value: 10
+//                 }
+//             ],
+//             colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             formatter: function (y) {
+//                 return y + "%";
+//             },
+//             resize: true
+//         });
 
-    if ($('#graph_line').length) {
+//     }
 
-        Morris.Line({
-            element: 'graph_line',
-            xkey: 'year',
-            ykeys: ['value'],
-            labels: ['Value'],
-            hideHover: 'auto',
-            lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            data: [{
-                    year: '2012',
-                    value: 20
-                },
-                {
-                    year: '2013',
-                    value: 10
-                },
-                {
-                    year: '2014',
-                    value: 5
-                },
-                {
-                    year: '2015',
-                    value: 5
-                },
-                {
-                    year: '2016',
-                    value: 20
-                }
-            ],
-            resize: true
-        });
+//     if ($('#graph_line').length) {
 
-        $MENU_TOGGLE.on('click', function () {
-            $(window).resize();
-        });
+//         Morris.Line({
+//             element: 'graph_line',
+//             xkey: 'year',
+//             ykeys: ['value'],
+//             labels: ['Value'],
+//             hideHover: 'auto',
+//             lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+//             data: [{
+//                     year: '2012',
+//                     value: 20
+//                 },
+//                 {
+//                     year: '2013',
+//                     value: 10
+//                 },
+//                 {
+//                     year: '2014',
+//                     value: 5
+//                 },
+//                 {
+//                     year: '2015',
+//                     value: 5
+//                 },
+//                 {
+//                     year: '2016',
+//                     value: 20
+//                 }
+//             ],
+//             resize: true
+//         });
 
-    }
+//         $MENU_TOGGLE.on('click', function () {
+//             $(window).resize();
+//         });
 
-};
+//     }
+
+// };
 
 
 
@@ -5518,6 +5787,69 @@ function init_echarts() {
 
 }
 
+//view & toggle account type
+
+$(document).ready(function () {
+    $(".btn-toggle").click(function () {
+        var mail = $(this).attr('data-mail')
+        $('#emailPlaceholderToggle').html(mail)
+    })
+    $("#toggle .btn-warning").click(function () {
+        var mail = $("#emailPlaceholderToggle").text();
+        $.post(`/accounts/toggleStatus`, {
+            mail: mail
+        }, function (data) {
+            console.log(data)
+            if (data === "Successed") {
+                alert("Toggle successfully")
+            } else {
+                alert("Fail to updated")
+            }
+        })
+        const mailPrefix = mail.split("@")[0];
+        if ($(`p.${mailPrefix}.userStatus`).text("") == "active") {
+            $(`p.${mailPrefix}.userStatus`).text('block');
+        } else if ($(`p.${mailPrefix}.userStatus`).text("") == "block") {
+            $(`p.${mailPrefix}.userStatus`).text("active")
+        } else {}
+        $('#toggle').modal('hide');
+    })
+
+    $(".btn-resend").click(function () {
+        var mail = $(this).attr('data-mail')
+        $('#emailPlaceholderResend').html(mail)
+    })
+    $("#resendNewLink .btn-warning").click(function () {
+        var mail = $("#emailPlaceholderResend").text();
+        $.post(`/accounts/resendLink`, {
+            mail: mail
+        }, function (data) {
+            console.log(data)
+            if (data === "Successed") {
+                alert("Resend new link verification, valid within 1 minute")
+            } else {
+                alert("Fail to resend")
+            }
+        })
+        $('#resendNewLink').modal('hide');
+    })
+
+    $(".btn-viewUser").click(function () {
+        var user = $(this).attr('data-user')
+        var data = $('.' + user);
+        var data2 = []
+        data.each(function () {
+            data2.push($(this).text())
+        })
+        $('#edImg').attr("src", data2[0])
+        $('#edName').val(data2[1])
+        $('#edEmail').val(data2[2])
+        $('#edUser').val(data2[3])
+        $('#edStatus').val(data2[4])
+        $('#edType').val(data2[5])
+    })
+})
+
 
 //delete & edit products
 $(document).ready(function () {
@@ -5540,6 +5872,7 @@ $(document).ready(function () {
     })
 })
 
+
 $(document).ready(function () {
     $(".btn-delete-product").click(function () {
         var id = $(this).attr('data')
@@ -5550,6 +5883,8 @@ $(document).ready(function () {
         })
 
         $('#d-data').html(data2[0] + " - " + data2[1])
+        var link = '/product/delete/'+data2[0]
+        $('#delLink').attr('href',link)
     })
 })
 
@@ -5557,15 +5892,15 @@ $(document).ready(function () {
     $("#delete .confirmedDeletedProduct").click(function () {
         const dataText = $('#d-data').text().split(" - ")[0];
         fetch(`/products/${dataText}`, {
-            method: 'DELETE',
-        })
+                method: 'DELETE',
+            })
             .then(response => {
-                if (response.status === 204) {
-                    $(`[data-barcode="${dataText}"]`).remove();
-                } else if (response.status === 404) {
-                    console.log('Product not found.');
+                if (response.status === 401) {
+                    alert("Do not delete this product because it is sold")
+                } else if (response.status === 200) {
+                    alert("This product had deleted!")
                 } else {
-                    console.error('Request failed.');
+                    alert("Somethings error")
                 }
             })
             .catch(error => {
@@ -5574,6 +5909,37 @@ $(document).ready(function () {
         $('#delete').modal('hide');
     })
 })
+
+
+$(document).ready(function () {
+    $("#editSpecticalItem").click(function () {
+        const barcode = $('#barcode').val();
+        const name = $('#name').val();
+        const salePrice = $('#slPrice').val();
+
+        console.log(barcode, name, salePrice);
+        console.log("barcode, name, salePrice");
+        $.post("/products/update", {
+            pid: barcode,
+            name: name,
+            salePrice: salePrice
+        }, function (data) {
+            console.log(data)
+            if (data === "Successed") {
+                alert("Updated successfully")
+            } else {
+                alert("Fail to updated")
+            }
+        })
+        $(`td.${barcode}.prodName`).text(name);
+        $(`td.${barcode}.prodPrice`).text(salePrice.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }));
+        $('#editform').modal('hide');
+    })
+})
+
 
 //delete & edit customer
 
@@ -5594,7 +5960,7 @@ $(document).ready(function () {
 })
 
 $(document).ready(function () {
-    $(".btn-delete-customer").click(function () {
+    $(".btn-view-customer").click(function () {
         var id = $(this).attr('data')
         var data = $('.' + id);
         var data2 = []
@@ -5602,49 +5968,323 @@ $(document).ready(function () {
             data2.push($(this).text())
         })
 
-        $('#d-data').html(data2[0] + " - " + data2[1])
+        $.get(`/customers/${data2[0]}`, {}, function (data) {
+            if (data === "Fail") {
+                alert("Fail to get")
+            } else {
+                populateModalTable(JSON.parse(data));
+            }
+        })
     })
 })
 
-$(document).ready(function() {
-    $('#addProductForm').submit(function(event) {
-      event.preventDefault();
-      const fileInput = document.getElementById('formFileFromCreateProduct').files[0];
-  
-      if (fileInput) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const image = new Image();
-          image.src = e.target.result;
-          
-          image.onload = function() {
-            // Tạo một canvas để vẽ lại ảnh với chất lượng giảm
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            
-            // Vẽ lại ảnh với chất lượng giảm
-            ctx.drawImage(image, 0, 0, image.width, image.height);
-            
-            // Lấy dữ liệu ảnh với chất lượng giảm
-            const base64Image = canvas.toDataURL('image/jpeg', 0.2); // Chỉnh số 0.7 cho chất lượng mong muốn
-            
-            // Đặt giá trị vào trường ẩn
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'base64Image',
-                value: base64Image
-            }).appendTo('#addProductForm');
-  
-            // Gỡ bỏ sự kiện submit và gửi lại form
-            $('#addProductForm').unbind('submit').submit();
-          };
-        };
-        reader.readAsDataURL(fileInput);
-      }
+function populateModalTable(jsonData) {
+    var tableBody = $('#data-table-body');
+    tableBody.empty();
+
+    jsonData.forEach(function (item) {
+        var row = '<tr>';
+        row += '<td>' + item._id + '</td>';
+        row += '<td>' + item.total.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }); + '</td>';
+        row += '<td>' + item.paymentType + '</td>';
+        row += '<td>' + item.saler.split("<<>>")[0] + '</td>';
+        row += '<td>' + formatDate(item.dateCreated) + '</td>';
+        row += '<td>' + '<button type="button" data-id="' + item._id + '" class="btn btn-primary btn-more-detail">More</button>' + '</td>';
+        row += '</tr>';
+
+        tableBody.append(row);
     });
-  });
+}
+
+$(document).ready(function () {
+    $(document).on("click", ".btn-more-detail", function () {
+        var id = $(this).attr('data-id');
+        console.log(id);
+        $.get(`/customers/detail/${id}`, {}, function (data) {
+            if (data === "Fail") {
+                alert("Fail to get")
+            } else {
+                const detail = JSON.parse(data);
+                $("#detail").modal("show")
+                $("#orderId strong").text(detail._id);
+                $("#salerName strong").text(detail.saler.split("<<>>")[0]);
+                $("#payment strong").text(detail.paymentType);
+                $("#date strong").text(detail.dateCreated);
+
+                var tableBody = $("#detail table tbody");
+                tableBody.empty();
+
+                detail.products.forEach(item => 
+                    tableBody.append(
+                        `<tr>
+                            <td>${item._id}</td>
+                            <td>${item.productBarcode}</td>
+                            <td>` + item.qty || "1" + `</td>
+                        </tr>`
+                ));
+            }
+        })
+    });
+});
+
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are 0-based, so add 1
+    const year = date.getFullYear();
+
+    // Format day, month, and year with leading zeros if needed
+    const formattedDay = day < 10 ? '0' + day : day;
+    const formattedMonth = month < 10 ? '0' + month : month;
+
+    // Create the final formatted date string in the "dd/mm/yyyy" format
+    const formattedDate = `${formattedDay}/${formattedMonth}/${year}`;
+
+    return formattedDate;
+}
+
+$(document).ready(function () {
+    $('#delete .btn-more-detail').click(function () {
+        const dataId = $(this).closest('tr').find('td:first').text();
+        alert('Bill ID: ' + dataId);
+    });
+});
+
+
+
+$(document).ready(function () {
+    $('#addProductForm').submit(function (event) {
+        event.preventDefault();
+        const fileInput = document.getElementById('formFileFromCreateProduct').files[0];
+
+        if (fileInput) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const image = new Image();
+                image.src = e.target.result;
+
+                image.onload = function () {
+                    // Tạo một canvas để vẽ lại ảnh với chất lượng giảm
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+
+                    // Vẽ lại ảnh với chất lượng giảm
+                    ctx.drawImage(image, 0, 0, image.width, image.height);
+
+                    // Lấy dữ liệu ảnh với chất lượng giảm
+                    const base64Image = canvas.toDataURL('image/jpeg', 0.2); // Chỉnh số 0.7 cho chất lượng mong muốn
+                    if (base64Image && base64Image.length > 0) {
+                        // Đặt giá trị vào trường ẩn
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'base64Image',
+                            value: base64Image
+                        }).appendTo('#addProductForm');
+                        
+                        // Gỡ bỏ sự kiện submit và gửi lại form
+                        $('#addProductForm').unbind('submit').submit();
+                    } else {
+                        // Xử lý khi không thể lấy mã Base64, ví dụ:
+                        alert('Do not support this file, please choose image raw');
+                    }
+                };
+            };
+            reader.readAsDataURL(fileInput);
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('#registration-form').on('submit', function (event) {
+        event.preventDefault();
+
+        // Get user input values
+        const name = $('#name').val();
+        const email = $('#email').val();
+
+        // Form validation
+        if (name.length < 2) {
+            alert('Name must have at least 2 characters');
+            return;
+        }
+
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+            alert('Invalid email format');
+            return;
+        }
+
+        // Form data submission (assuming you have a server-side endpoint)
+        const formData = {
+            name: name,
+            mail: email,
+            type: "staff"
+        };
+
+        // You can use AJAX to send the data to the server
+        $.ajax({
+            url: '/login/identify',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                alert("An Email sent to your account please verify");
+            },
+            error: function (response) {
+                if (response.status == 409) {
+                    alert("User with given email already exist!");
+                } else if (response.status == 422) {
+                    alert("An error/s user info");
+                } else if (response.status == 400) {
+                    alert("an error occurred while sending email, try again");
+                } else {
+                    alert('Unknown error');
+                }
+            }
+        });
+    });
+
+    $('#cancel-button').on('click', function () {
+        // Reset the form to clear all input values
+        $('#registration-form')[0].reset();
+    });
+});
+
+$(document).ready(function () {
+    $("#submitedChangePassword").click(function () {
+        var oldPassword = $("#oldPassword").val();
+        var newPassword = $("#newPassword").val();
+        var confirmPassword = $("#confirmPassword").val();
+        var uid = $("#uidChanging").val();
+        if (!newPassword || !confirmPassword || !oldPassword || !uid) {
+            alert("Tất cả thông tin không được để trống.");
+            return;
+        }
+        // Kiểm tra xem newPassword và confirmPassword có khớp nhau không
+        if (newPassword !== confirmPassword) {
+            alert("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+            return;
+        }
+
+        // Thực hiện POST request đến /changePassword 
+        console.log("Pass")
+        $.ajax({
+            type: "POST",
+            url: "/user/changePassword",
+            data: {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword,
+                uid: uid
+            },
+            success: function (data) {
+                console.log(data);
+                if (data == "Wrong old password") {
+                    alert("Mật khẩu cũ không hợp lệ");
+                } else if (data == "Successed") {
+                    alert("Đổi mật khẩu thành công.");
+                    $("#changePasswordform").modal("hide");
+                } else if (data == "Mistake") {
+                    alert("Các mật khẩu mới không chính xác");
+                } else {
+                    alert("Lỗi khi đổi mật khẩu.");
+                }
+            },
+            error: function () {
+                alert("Lỗi khi gửi yêu cầu đổi mật khẩu.");
+            }
+        });
+        console.log("Pass w")
+
+    });
+});
+
+$(document).ready(function () {
+    $("#imageChanging").on("change", function () {
+        var input = this;
+        var img = $("#uploadedImage");
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var uploadedImage = new Image();
+                uploadedImage.src = e.target.result;
+
+                uploadedImage.onload = function () {
+                    // Tạo một canvas để vẽ lại ảnh với kích thước mới
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const maxSize = 1000; // Kích thước mới bạn muốn
+
+                    // Tính toán kích thước mới dựa trên tỷ lệ
+                    var newWidth, newHeight;
+                    if (uploadedImage.width > uploadedImage.height) {
+                        newWidth = maxSize;
+                        newHeight = (uploadedImage.height / uploadedImage.width) * maxSize;
+                    } else {
+                        newWidth = (uploadedImage.width / uploadedImage.height) * maxSize;
+                        newHeight = maxSize;
+                    }
+
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    // Vẽ lại ảnh với kích thước mới
+                    ctx.drawImage(uploadedImage, 0, 0, newWidth, newHeight);
+
+                    // Lấy dữ liệu ảnh mới
+                    const base64Image = canvas.toDataURL('image/jpeg', 0.05);
+
+                    // Hiển thị hình ảnh đã thay đổi kích thước
+                    img.attr("src", base64Image);
+                };
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+});
+
+$(document).ready(function () {
+    $("#submitedChangeImage").on("click", function () {
+        var base64Image = $("#uploadedImage").attr("src");
+        var userId = $("#uidChangingImage").val();
+        var maxSize = 10000; // Độ dài tối đa mong muốn
+        console.log(base64Image)
+        sendImageData(userId, base64Image);
+    });
+});
+
+function sendImageData(userId, base64Image) {
+    console.log(base64Image)
+    console.log(userId)
+    $.post("user/changeImage", {
+        uid: userId,
+        image: base64Image
+    }, function (data) {
+        if (data == "Successed") {
+            alert("Hình ảnh đã được thay đổi thành công.");
+            $(".profile-avatar").attr('src', base64Image);
+            $(".userImageFromCookieByBase64").attr('src', base64Image);
+            localStorage.setItem("image", base64Image);
+            $("#changeImageform").modal('hide');
+
+        } else if (data == "Fail") {
+            alert("Không thể thay đổi ảnh này");
+        } else {
+            alert("Có lỗi xảy ra khi thay đổi hình ảnh.")
+        }
+    });
+}
+
+
 
 $(document).ready(function () {
     init_sparklines();
@@ -5667,7 +6307,7 @@ $(document).ready(function () {
     init_EasyPieChart();
     init_charts();
     init_echarts();
-    init_morris_charts();
+    //init_morris_charts();
     init_skycons();
     init_select2();
     init_validator();
@@ -5682,4 +6322,3 @@ $(document).ready(function () {
     init_autosize();
     init_autocomplete();
 });
-
