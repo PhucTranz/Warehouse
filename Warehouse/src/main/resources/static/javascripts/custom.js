@@ -325,17 +325,6 @@ if (typeof NProgress != 'undefined') {
 }
 
 
-$(document).ready(function () {
-    $('#editSpecticalItem').click(function () {
-        editSpecticalItemFunction();
-    });
-});
-
-function editSpecticalItemFunction() {
-    alert('Save changes button clicked');
-}
-
-
 //hover and retain popover when on popover content
 var originalLeave = $.fn.popover.Constructor.prototype.leave;
 $.fn.popover.Constructor.prototype.leave = function (obj) {
@@ -5851,26 +5840,7 @@ $(document).ready(function () {
 })
 
 
-//delete & edit products
-$(document).ready(function () {
-    $(".btn-edit-product").click(function () {
-        var id = $(this).attr('id')
-        var data = $('.' + id);
-        var data2 = []
-        data.each(function () {
-            data2.push($(this).text())
-        })
-
-        $('#barcode').val(data2[0])
-        $('#name').val(data2[1])
-        $('#ogPrice').val(data2[2])
-        $('#slPrice').val(data2[3])
-        $('#category').val(data2[4])
-        $('#created').val(data2[5])
-        $('#quantity').val(data2[6])
-        $('#sold').val(data2[7])
-    })
-})
+//delete product
 
 
 $(document).ready(function () {

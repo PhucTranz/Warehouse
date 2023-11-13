@@ -4,7 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -23,4 +26,8 @@ public class SanPham {
 	private String ngaysx;
 	private int gia;
 	private int mancc;
+	@ManyToOne
+	@JoinColumn(name = "mancc", referencedColumnName = "mancc", insertable = false, updatable = false)
+	private NhaCungCap nhaCungCap;
+
 }

@@ -18,7 +18,61 @@
     <link th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
-            
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+	    $(document).ready(function () {
+	        var table = $('.table').DataTable();
+	        $('#sizeFilter').on('change', function () {
+	            var selectedSize = $(this).val();
+	            table.search('').columns().search('').draw();
+	            if (selectedSize !== 'all') {
+	                table.column(6).search(selectedSize).draw(); 
+	            }
+	        });
+	    });
+	    function previewImage() {
+	        const input = document.getElementById('formFileFromCreateProduct');
+	        const preview = document.getElementById('image-preview');
+	        
+	        if (input.files && input.files[0]) {
+	            const reader = new FileReader();
+	            
+	            reader.onload = function(e) {
+	                preview.src = e.target.result;
+	            };
+	            
+	            reader.readAsDataURL(input.files[0]);
+	        } else {
+	            preview.src = '';
+	        }
+    	}
+	</script>
+	
+	<script th:inline="javascript">
+        function edform(id){
+			var listProduct = /*[[${listProduct}]]*/ null;
+			var product = listProduct.find(e => e.masp === id);
+			$('#masp').val(product.masp)
+			$('#tensp').val(product.tensp)
+			$('#mau').val(product.mau)
+			$('#size').val(product.size)
+			$('#gia').val(product.gia)
+			$('#soluong').val(product.soluong)
+			$('#ngaysx').val(product.ngaysx)
+			$('#image-preview').attr('src','/images/'+product.hinhanh)
+			
+			var x = document.getElementById("selectNcc");
+			var listNCC = /*[[${listNCC}]]*/ null;
+			listNCC.forEach(function(e){
+				var option = document.createElement("option");
+				option.value=e.mancc;
+				if(e.mancc===product.mancc)
+					option.selected='selected'
+				option.text = e.tenncc;
+				x.add(option);
+			})
+		}
+    </script>
 </head>
 <body>
     <div layout:fragment="content" >
@@ -37,7 +91,7 @@
         </div>
       </div>
     </div>
-
+	
     <div class="clearfix"></div>
 
     <div class="row">
@@ -60,8 +114,12 @@
                   <p class="text-muted font-13 m-b-30">
                     This is using for search, delete and update product
                   </p>
-
-                  <div
+					<label for="sizeFilter">Filter by Company:</label>
+				    <select id="sizeFilter">
+				    	<option value="">All</option>
+				        <option th:each="ncc : ${listNCC}" th:value="${ncc.tenncc}" th:text="${ncc.tenncc}"></option>
+				    </select>
+	                  <div
                     id="datatable-responsive_wrapper"
                     class="dataTables_wrapper container-fluid dt-bootstrap no-footer"
                   >
@@ -102,7 +160,7 @@
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 25%;"
+                                style="width: 20%;"
                               >Image</th>
                               <th
                                 tabindex="0"
@@ -125,8 +183,16 @@
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 15%;"
+                                style="width: 10%;"
                               >Price</th>
+                              <th
+                                class="sorting"
+                                tabindex="0"
+                                aria-controls="datatable-responsive"
+                                rowspan="1"
+                                colspan="1"
+                                style="width: 10%;"
+                              >Company</th>
                               <th
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
@@ -143,11 +209,12 @@
                                 <td th:class="${p.masp}"><img class="imgProductTB" th:src="@{'/images/'+${p.hinhanh}}"></td>
                                 <td th:text="${p.size}" th:class="${p.masp}"></td>
                                 <td th:text="${p.soluong}" th:class="${p.masp}"></td>
-                                <td th:text="${p.gia}" th:class="${p.masp}" data="{{date}}"></td>
+                                <td th:text="${p.gia}" th:class="${p.masp}" ></td>
+                                <td th:text="${p.nhaCungCap.tenncc}" th:class="${p.masp}"></td>
                                 <td>
                                 	<button><a style="color:black;" th:href="'product/'+${p.masp}">Details</a></button>
                                   	<button data-toggle="modal" data-target="#delP" th:data="${p.masp}" class="btn-delete-product">Delete</button>
-                                  	<button data-toggle="modal" data-target="#editform" th:id="${p.masp}" class="btn-edit-product">Edit</button>
+                                  	<button data-toggle="modal" data-target="#editform" th:id="${p.masp}" class="btn-edit-product" th:onclick="'edform('+${p.masp}+')'">Edit</button>
                                 </td>
                               </tr>
                         </table>
@@ -195,39 +262,58 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form th:action="@{/update_product}" th:object="${product}" method="POST" enctype="multipart/form-data">
       <div class="modal-body">
-
-        <form>
+        
+        	<div class="form-group">
+            	<img src="" id="image-preview" alt="">
+            </div>
           <div class="form-group">
             <label for="barcode">Id</label>
-            <input type="text" class="form-control" required="required" readonly="readonly" id="barcode" name="barcode">
+            <input type="number" class="form-control" th:field="*{masp}" required="required" readonly="readonly" id="masp" name="barcode">
           </div>
            <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" autocomplete="off" id="name" name="name">
+            <input type="text" class="form-control" th:field="*{tensp}" id="tensp" name="name">
+          </div>
+          <div class="form-group">
+            <label for="ogPrice">Color</label>
+            <input type="text" class="form-control" th:field="*{mau}" id="mau" name="originalPrice">
           </div>
            <div class="form-group">
-            <label for="ogPrice">Image</label>
-            <input type="text" class="form-control" id="ogPrice" name="originalPrice">
+            <label for="ogPrice">Price</label>
+            <input type="number" class="form-control" th:field="*{gia}" id="gia" name="originalPrice">
           </div>
            <div class="form-group">
             <label for="slPrice">Size</label>
-            <input type="number" class="form-control" id="slPrice" name="salePrice">
+            <input type="number" class="form-control" th:field="*{size}" id="size" name="salePrice">
           </div>
            <div class="form-group">
             <label for="category">Quantity</label>
-            <input type="text" class="form-control" id="category" name="category">
+            <input type="number" class="form-control" th:field="*{soluong}" id="soluong" name="category">
           </div>
            <div class="form-group">
-            <label for="created">Price</label>
-            <input type="datetime-local" class="form-control" id="created" name="dateCreated" value="2023-10-24T06:59">
-        </form>
+            <label for="category">Date of manufacture</label>
+            <input type="text" class="form-control" th:field="*{ngaysx}" id="ngaysx" name="category">
+          </div>
+           <div class="form-group">
+            <label for="created">Company</label>
+            <select class="select2_multiple form-control" name="category" id="selectNcc" th:field="*{mancc}">
+            	
+            </select>
+           </div>
+           <div class="form-group">
+            <label for="category">Image</label>
+            <input class="form-control" type="file" accept="image/*" id="formFileFromCreateProduct" name="file" onchange="previewImage()">
+          </div>
+        
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="editSpecticalItem" type="button" class="btn btn-primary">Save changes</button>
+        <button id="editSpecticalItem" type="submit" class="btn btn-primary">Save changes</button>
       </div>
+      </form>
     </div>
   </div>
 </div>

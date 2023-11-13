@@ -5077,4 +5077,8 @@ ul.notifications {
 	height: 50%;
   width: 50%;
 }
-  
+#image-preview{
+	width: 50%;
+    max-height: 300px;
+    margin-left: 25%;
+}
