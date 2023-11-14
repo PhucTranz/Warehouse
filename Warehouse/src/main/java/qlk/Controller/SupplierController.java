@@ -38,8 +38,6 @@ public class SupplierController {
             nhaCungCapService.delete(id);
             return "redirect:/supplier";
         } catch (Exception e) {
-            model.addAttribute("donotdelete", true);
-            model.addAttribute("supplier", nhaCungCapService.get(id));
             return "redirect:/supplier"; 
         }
     }
