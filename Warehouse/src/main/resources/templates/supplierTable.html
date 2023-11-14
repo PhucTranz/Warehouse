@@ -39,6 +39,17 @@
               x.add(option);
           })
       }
+      $(document).ready(function() {
+        $('.btn-delete-supplier').click(function() {
+            var supplierName = $(this).closest('tr').find('td:eq(1)').text();
+            $('#d-data').text("Are you sure to delete " + supplierName + "?");
+    
+            var supplierId = $(this).attr('data');
+            $('#delLink').attr('href', 'supplier/delete/' + supplierId);
+            
+            $('#delSupplier').modal('show');
+        });
+    });
   </script>
 </head>
 <body>
@@ -172,6 +183,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div class="modal fade" id="delSupplier" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
   <div class="modal-dialog" role="document">

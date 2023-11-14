@@ -33,9 +33,15 @@ public class SupplierController {
     }
 
     @RequestMapping("/supplier/delete/{id}")
-    public String deleteSupplier(@PathVariable(name = "id") int id) {
-        nhaCungCapService.delete(id);
-        return "redirect:/supplier";
+    public String deleteSupplier(@PathVariable(name = "id") int id, Model model) {
+        try {
+            nhaCungCapService.delete(id);
+            return "redirect:/supplier";
+        } catch (Exception e) {
+            model.addAttribute("donotdelete", true);
+            model.addAttribute("supplier", nhaCungCapService.get(id));
+            return "redirect:/supplier"; 
+        }
     }
 
     @RequestMapping("/add_supplier")
