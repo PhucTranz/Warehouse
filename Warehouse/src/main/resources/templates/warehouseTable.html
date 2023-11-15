@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{mainlayout}">
+<head>
+    <!-- Bootstrap -->
+    <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- NProgress -->
+    <link th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
+    <!-- iCheck -->
+    <link th:href="@{/vendors/iCheck/skins/flat/green.css}" rel="stylesheet">
+    <!-- Datatables -->
+    <link th:href="@{/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="path/to/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        function editKhoForm(id) {
+            var listKho = /*[[${listKho}]]*/ null;
+            var kho = listKho.find(e => e.makho === id);
+            $('#makho').val(kho.makho);
+            $('#tenkho').val(kho.tenkho);
+            $('#diachi').val(kho.diachi);
+        }
+
+        $(document).ready(function() {
+            $('.btn-delete-kho').click(function() {
+                var khoName = $(this).closest('tr').find('td:eq(1)').text();
+                console.log(khoName)
+                $('#d-data').text("Are you sure to delete " + khoName + "?");
+
+                var khoId = $(this).attr('data');
+                console.log(khoId)
+
+                $('#delLink').attr('href', 'warehouse/delete/' + khoId);
+
+                $('#delKho').modal('show');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!-- Phần hiển thị danh sách Warehouse -->
+        <div class="right_col" role="main" style="min-height: 4604.8px;">
+            <!-- ... -->
+            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 10%;" aria-sort="ascending">ID</th>
+                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 25%;" aria-label="Name: activate to sort column ascending">Name</th>
+                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 25%;" aria-label="Address: activate to sort column ascending">Address</th>
+                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 40%;" aria-label="Address: activate to sort column ascending">Action</th>
+                        <!-- Thêm các cột phù hợp với model Warehouse -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Duyệt và hiển thị thông tin từ danh sách Warehouse -->
+                    <tr th:each="kho : ${listKho}" role="row">
+                        <td th:text="${kho.makho}" th:class="'sorting_1 ' + ${kho.makho}" tabindex="0"></td>
+                        <td th:text="${kho.tenkho}" th:class="${kho.tenkho}"></td>
+                        <td th:text="${kho.diachi}" th:class="${kho.diachi}"></td>
+                        <td>
+                            <!-- Các button Details, Delete và Edit -->
+                            <button><a style="color:black;" th:href="'warehouse/'+${kho.makho}">Details</a></button>
+                            <button data-toggle="modal" data-target="#delKho" th:data="${kho.makho}" class="btn-delete-kho">Delete</button>
+                            <button data-toggle="modal" data-target="#editKhoModal" th:id="${kho.makho}" class="btn-edit-kho" th:onclick="'editKhoForm('+${kho.makho}+')'">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    
+<script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+<!-- NProgress -->
+<script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+<!-- Datatables -->
+<script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.flash.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+<script th:src="@{/vendors/datatables.net-scroller/js/dataTables.scroller.min.js}"></script>
+<script th:src="@{/vendors/jszip/dist/jszip.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
+<script th:src="@{/javascripts/custom.js}"></script>
+
+    <!-- Modal xác nhận xóa Warehouse -->
+    <div class="modal fade" id="delKho" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="lable">Are you sure to delete this warehouse?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+        
+                <p id="d-data"></p>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-warning confirmedDeletedProduct"><a id="delLink" style="color:black;" href="#">Yes</a></button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal chỉnh sửa Warehouse -->
+    <div class="modal fade" id="editKhoModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Warehouse</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{/update_warehouse}" th:object="${warehouse}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="makho">ID</label>
+                            <input type="number" class="form-control" th:field="*{makho}" required="required" readonly="readonly" id="makho" name="mancc">
+                        </div>
+                        <div class="form-group">
+                            <label for="tenkho">Name</label>
+                            <input type="text" class="form-control" th:field="*{tenkho}" id="tenkho" name="tenncc">
+                        </div>
+                        <div class="form-group">
+                            <label for="diachi">Address</label>
+                            <input type="text" class="form-control" th:field="*{diachi}" id="diachi" name="diachi">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="editSupplierItem" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
