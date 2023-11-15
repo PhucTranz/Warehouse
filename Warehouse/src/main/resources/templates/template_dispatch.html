@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách đơn hàng</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Danh sách đơn hàng</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Mã đơn</th>
+            <th scope="col">Ngày nhập</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">Số tiền</th>
+            <th scope="col">Đơn vị cung cấp</th>
+          </tr>
+        </thead>
+        <tbody id="orderList">
+          <tr data-order-id="DH001">
+            <td>DH001</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH002</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH003</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH004</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH005</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH006</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH007</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+          <tr data-order-id="DH001">
+            <td>DH008</td>
+            <td>01/11/2023</td>
+            <td>Đã giao hàng</td>
+            <td>150</td>
+            <td>ABC Company</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bootstrap JS và jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#orderList tr").click(function () {
+          var orderId = $(this).data("order-id");
+          console.log("Mã đơn hàng: " + orderId);
+        });
+      });
+    </script>
+  </body>
+</html>
