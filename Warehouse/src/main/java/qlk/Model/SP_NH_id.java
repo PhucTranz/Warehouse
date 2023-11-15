@@ -34,5 +34,30 @@ public class SP_NH_id implements Serializable{
 	public void setMaDonNhap(int madonnhap) {
 		this.madonnhap = madonnhap;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + masp;
+		result = prime * result + madonnhap;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SP_NH_id other = (SP_NH_id) obj;
+		if (masp != other.masp)
+			return false;
+		if (madonnhap != other.madonnhap)
+			return false;
+		return true;
+	}
 	
 }

@@ -1,10 +1,11 @@
 package qlk.Configuration;
 
-import org.springframework.context.annotation.*;
-import org.springframework.security.authentication.dao.*;
-import org.springframework.security.config.annotation.web.builders.*;
-import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -35,27 +36,24 @@ public class WebSecurityConfig{
  
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-        	.antMatchers("/login", "/doLogout","/loginerror").permitAll()
-        	.antMatchers("/","/changepassword").hasAnyRole("NV","ADMIN")
-        	.antMatchers("/admin/**").hasRole("ADMIN")
-        	//.antMatchers("/").hasRole("USER")
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            	.permitAll()
-            	.loginPage("/login")
-            	.usernameParameter("email")
-            	.passwordParameter("password")
-            	.defaultSuccessUrl("/")
-            	.failureUrl("/loginerror")
-            .and()
-            .logout()
-            	.permitAll()
-            	.logoutUrl("/doLogout")
-            	.logoutSuccessUrl("/login")
-        	.and().csrf().disable()
-        	.exceptionHandling().accessDeniedPage("/403");
+        http.authorizeRequests(requests -> requests
+                .antMatchers("/login", "/doLogout", "/loginerror").permitAll()
+                .antMatchers("/", "/changepassword").hasAnyRole("NV", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                //.antMatchers("/").hasRole("USER")
+                .anyRequest().authenticated())
+                .formLogin(login -> login
+                        .permitAll()
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/loginerror"))
+                .logout(logout -> logout
+                        .permitAll()
+                        .logoutUrl("/doLogout")
+                        .logoutSuccessUrl("/login")).csrf(csrf -> csrf.disable())
+                .exceptionHandling(handling -> handling.accessDeniedPage("/403"));
         	      	
         return http.build();
     }

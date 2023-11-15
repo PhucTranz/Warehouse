@@ -34,5 +34,30 @@ public class SP_K_id implements Serializable{
 	public void setMaKho(int makho) {
 		this.makho = makho;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + masp;
+		result = prime * result + makho;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SP_K_id other = (SP_K_id) obj;
+		if (masp != other.masp)
+			return false;
+		if (makho != other.makho)
+			return false;
+		return true;
+	}
 	
 }
