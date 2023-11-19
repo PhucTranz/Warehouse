@@ -17,13 +17,8 @@
     <link th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
-    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="path/to/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script th:inline="javascript">
         function editKhoForm(id) {
             var listKho = /*[[${listKho}]]*/ null;
@@ -42,7 +37,7 @@
                 var khoId = $(this).attr('data');
                 console.log(khoId)
 
-                $('#delLink').attr('href', 'warehouse/delete/' + khoId);
+                $('#delLink').attr('href', '/warehouse/delete/' + khoId);
 
                 $('#delKho').modal('show');
             });
@@ -58,9 +53,9 @@
                 <thead>
                     <tr role="row">
                         <th class="sorting_asc" tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 10%;" aria-sort="ascending">ID</th>
-                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 25%;" aria-label="Name: activate to sort column ascending">Name</th>
-                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 25%;" aria-label="Address: activate to sort column ascending">Address</th>
-                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 40%;" aria-label="Address: activate to sort column ascending">Action</th>
+                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 30%;" aria-label="Name: activate to sort column ascending">Name</th>
+                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 35%;" >Address</th>
+                        <th tabindex="0" aria-controls="datatable-responsive" rowspan="1" colspan="1" style="width: 25%;" >Action</th>
                         <!-- Thêm các cột phù hợp với model Warehouse -->
                     </tr>
                 </thead>
@@ -72,7 +67,7 @@
                         <td th:text="${kho.diachi}" th:class="${kho.diachi}"></td>
                         <td>
                             <!-- Các button Details, Delete và Edit -->
-                            <button><a style="color:black;" th:href="'warehouse/'+${kho.makho}">Details</a></button>
+                            <button><a style="color:black;" th:href="'/warehouse/'+${kho.makho}">Details</a></button>
                             <button data-toggle="modal" data-target="#delKho" th:data="${kho.makho}" class="btn-delete-kho">Delete</button>
                             <button data-toggle="modal" data-target="#editKhoModal" th:id="${kho.makho}" class="btn-edit-kho" th:onclick="'editKhoForm('+${kho.makho}+')'">Edit</button>
                         </td>
@@ -80,38 +75,9 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-
-    
-<script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
-<!-- Bootstrap -->
-<script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
-<!-- FastClick -->
-<script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
-<!-- NProgress -->
-<script th:src="@{/vendors/nprogress/nprogress.js}"></script>
-<!-- iCheck -->
-<script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
-<!-- Datatables -->
-<script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-buttons/js/buttons.flash.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
-<script th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
-<script th:src="@{/vendors/datatables.net-scroller/js/dataTables.scroller.min.js}"></script>
-<script th:src="@{/vendors/jszip/dist/jszip.min.js}"></script>
-<script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
-<script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
-<script th:src="@{/javascripts/custom.js}"></script>
-
-    <!-- Modal xác nhận xóa Warehouse -->
+         
+         
+          <!-- Modal xác nhận xóa Warehouse -->
     <div class="modal fade" id="delKho" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -167,5 +133,40 @@
             </div>
         </div>
     </div>
+         
+<script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+<!-- NProgress -->
+<script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+<!-- Datatables -->
+<script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.flash.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+<script th:src="@{/vendors/datatables.net-scroller/js/dataTables.scroller.min.js}"></script>
+<script th:src="@{/vendors/jszip/dist/jszip.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
+
+
+    </div>
+
+
+
+
+   
+    
 </body>
 </html>

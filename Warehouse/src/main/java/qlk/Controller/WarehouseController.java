@@ -16,6 +16,7 @@ public class WarehouseController {
     @GetMapping("/warehouse")
     public String getAllKho(Model model) {
         model.addAttribute("listKho", khoService.listAll());
+		model.addAttribute("warehouse", new Kho());
         return "warehouseTable";
     }
 
@@ -28,7 +29,7 @@ public class WarehouseController {
     @GetMapping("/warehouse/add")
     public String showAddForm(Model model) {
         model.addAttribute("kho", new Kho());
-        return "warehouseForm";
+        return "createWarehouse";
     }
 
     @PostMapping("/save_warehouse")
@@ -37,7 +38,7 @@ public class WarehouseController {
         return "redirect:/warehouse/"; 
     }
 
-    @PostMapping("/warehouse/edit/{id}")
+    @PostMapping("/update_warehouse")
     public String editKho(@ModelAttribute("kho") Kho kho) {
         Kho kho_temp = khoService.get(kho.getMakho());
         kho_temp.setDiachi(kho.getDiachi());

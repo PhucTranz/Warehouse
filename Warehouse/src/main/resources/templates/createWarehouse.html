@@ -26,7 +26,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Create a new supplier</h3>
+                        <h3>Create a new warehouse</h3>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -34,7 +34,7 @@
                     <div class="col-sm-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Supplier Information</h2>
+                                <h2>Warehouse Information</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -43,26 +43,20 @@
                             </div>
                             <div class="x_content">
                                 <br>
-                                <form id="addSupplierForm" class="form-horizontal form-label-left" th:action="@{/save_supplier}" th:object="${supplier}" method="POST">
-                                    <!-- Supplier's name -->
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-3" for="supplier-name">Supplier's name <span class="required"></span></label>
-                                        <div class="col-md-9 col-sm-9 ">
-                                            <input type="text" id="supplier-name" required="required" class="form-control" name="name" th:field="*{tenncc}">
-                                        </div>
-                                    </div>
+                                <form id="addSupplierForm" class="form-horizontal form-label-left" th:action="@{/save_warehouse}" th:object="${kho}" method="POST">
+                              
                                     <!-- Supplier's address -->
                                     <div class="form-group row">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-3" for="supplier-address">Address <span class="required"></span></label>
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3" for="supplier-address">Name <span class="required"></span></label>
                                         <div class="col-md-9 col-sm-9 ">
-                                            <input type="text" id="supplier-address" required="required" class="form-control" name="address" th:field="*{diachi}">
+                                            <input type="text" id="supplier-address" required="required" class="form-control" name="address" th:field="*{tenkho}">
                                         </div>
                                     </div>
                                     <!-- Supplier's phone number -->
                                     <div class="form-group row">
-                                        <label class="control-label col-md-3 col-sm-3 col-xs-3" for="supplier-phone">Phone <span class="required"></span></label>
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-3" for="supplier-phone">Address <span class="required"></span></label>
                                         <div class="col-md-9 col-sm-9 ">
-                                            <input type="text" id="supplier-phone" required="required" class="form-control" name="phone" th:field="*{sdt}">
+                                            <input type="text" id="supplier-phone" required="required" class="form-control" name="phone" th:field="*{diachi}">
                                         </div>
                                     </div>
                                     <div class="ln_solid"></div>
@@ -80,7 +74,7 @@
                 </div>
             </div>
         </div>
-         <!-- JavaScript -->
+        <!-- JavaScript -->
     <script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
     <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
@@ -95,6 +89,6 @@
     <script th:src="@{/vendors/cropper/dist/cropper.min.js}"></script>
     </div>
 
-   
+    
 </body>
 </html>

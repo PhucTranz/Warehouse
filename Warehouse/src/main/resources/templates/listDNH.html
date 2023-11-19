@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate = "~{mainlayout}">
 <head>
-    <!-- Bootstrap -->
+     <!-- Bootstrap -->
     <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -20,42 +20,12 @@
     <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
     <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script th:inline="javascript">
-      function edSupplierForm(id){
-          var listSupplier = /*[[${listSupplier}]]*/ null;
-          var supplier = listSupplier.find(e => e.mancc === id);
-          $('#mancc').val(supplier.mancc);
-          $('#tenncc').val(supplier.tenncc);
-          $('#diachi').val(supplier.diachi);
-          $('#sdt').val(supplier.sdt);
-          
-          var x = document.getElementById("selectNcc");
-          var listNCC = /*[[${listNCC}]]*/ null;
-          listNCC.forEach(function(e){
-              var option = document.createElement("option");
-              option.value=e.mancc;
-              if(e.mancc === supplier.mancc)
-                  option.selected='selected'
-              option.text = e.tenncc;
-              x.add(option);
-          })
-      }
-      $(document).ready(function() {
-        $('.btn-delete-supplier').click(function() {
-            var supplierName = $(this).closest('tr').find('td:eq(1)').text();
-            $('#d-data').text("Are you sure to delete " + supplierName + "?");
-    
-            var supplierId = $(this).attr('data');
-            $('#delLink').attr('href', 'supplier/delete/' + supplierId);
-            
-            $('#delSupplier').modal('show');
-        });
-    });
-  </script>
+  <title>Danh sách đơn hàng</title>
+   
 </head>
 <body>
     <div layout:fragment="content" >
-    	
+    	   	
 <div class="right_col" role="main" style="min-height: 4604.8px;">
   <div class="">
     <div class="page-title">
@@ -124,7 +94,7 @@
                                 colspan="1"
                                 style="width: 5%;"
                                 aria-sort="ascending"
-                              >Id</th>
+                              >Mã đơn</th>
                               <th
                                 class="sorting"
                                 tabindex="0"
@@ -133,14 +103,14 @@
                                 colspan="1"
                                 style="width: 25%;"
                                 aria-label="Office: activate to sort column ascending"
-                              >Name</th>
+                              >Ngày nhập</th>
                               <th
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 25%;"
-                              >Address</th>
+                              >Tổng tiền</th>
                               <th
                                 class="sorting"
                                 tabindex="0"
@@ -148,14 +118,14 @@
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 25%;"
-                              >Phone</th>
+                              >Trạng thái</th>
                               <th
                                 tabindex="0"
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 20%;"
-                              >Action</th>
+                              >Đơn vị cung cấp</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -185,68 +155,15 @@
   </div>
 </div>
 
-
-
-<div class="modal fade" id="delSupplier" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="lable">Are you sure to delete this product?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <p id="d-data"></p>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-warning confirmedDeletedProduct"><a id="delLink" style="color:black;" href="#">Yes</a></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editSupplierModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Edit Supplier</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <form th:action="@{/update_supplier}" th:object="${supplier}" method="POST" enctype="multipart/form-data">
-              <div class="modal-body">
-                  <div class="form-group">
-                      <label for="mancc">ID</label>
-                      <input type="number" class="form-control" th:field="*{mancc}" required="required" readonly="readonly" id="mancc" name="mancc">
-                  </div>
-                  <div class="form-group">
-                      <label for="tenncc">Name</label>
-                      <input type="text" class="form-control" th:field="*{tenncc}" id="tenncc" name="tenncc">
-                  </div>
-                  <div class="form-group">
-                      <label for="diachi">Address</label>
-                      <input type="text" class="form-control" th:field="*{diachi}" id="diachi" name="diachi">
-                  </div>
-                  <div class="form-group">
-                      <label for="sdt">Phone</label>
-                      <input type="number" class="form-control" th:field="*{sdt}" id="sdt" name="sdt">
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button id="editSupplierItem" type="submit" class="btn btn-primary">Save changes</button>
-              </div>
-          </form>
-      </div>
-  </div>
-</div>
-
-
+    <script>
+      $(document).ready(function () {
+        $("#orderList tr").click(function () {
+          var orderId = $(this).data("order-id");
+          console.log("Mã đơn hàng: " + orderId);
+        });
+      });
+    </script>
+    	
 <script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
 <!-- Bootstrap -->
 <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
@@ -273,9 +190,6 @@
 <script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
 <script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
 	</div>
-
 </body>
 </html>
-
-
 
