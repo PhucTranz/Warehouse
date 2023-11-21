@@ -1,6 +1,7 @@
 package qlk.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,10 @@ public class SanPham_KhoService {
 	}
 	
 	public SanPham_Kho get(SP_K_id id) {
-		return repo.findById(id).get();
+		Optional<SanPham_Kho> optional = repo.findById(id);
+		if (optional.isPresent()) 
+			return optional.get();
+		return null;
 	}
 	
 	public void delete(SP_K_id id) {

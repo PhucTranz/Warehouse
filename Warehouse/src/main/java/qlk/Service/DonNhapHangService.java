@@ -30,4 +30,9 @@ public class DonNhapHangService {
 	public void delete(int id) {
 		repo.deleteById(id);
 	}
+	
+	public DonNhapHang getLastItem() {
+		List<DonNhapHang> listDNH = repo.findAll();
+		return listDNH.get(listDNH.size()-1);
+	}
 }

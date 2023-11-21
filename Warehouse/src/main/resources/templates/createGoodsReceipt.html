@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{mainlayout}">
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- NProgress -->
+    <link th:href="@{/vendors/nprogress/nprogress.css}" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link th:href="@{/vendors/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link th:href="@{/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css}" rel="stylesheet">
+    <!-- Ion.RangeSlider -->
+    <link th:href="@{/vendors/normalize-css/normalize.css}" rel="stylesheet">
+    <link th:href="@{/vendors/ion.rangeSlider/css/ion.rangeSlider.css}" rel="stylesheet">
+    <link th:href="@{/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css}" rel="stylesheet">
+    <!-- Bootstrap Colorpicker -->
+    <link th:href="@{/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css}" rel="stylesheet">
+    <link th:href="@{/vendors/cropper/dist/cropper.min.css}" rel="stylesheet">
+    <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
+	<script th:inline="javascript">
+		let options =[{id:0,text:'Choose a product'}]
+		let selectedOptions = []; 
+		let total = 0;
+		window.onload = function() {
+			/*<![CDATA[*/
+			var listP = /*[[${listP}]]*/ []; 
+			/*]]>*/
+			for(let i = 0; i< listP.length; i++){
+				options.push({id: listP[i].masp, text: listP[i].tensp, data: listP[i].gia})
+			}
+			
+			$('#dropdown').select2({
+			    data: options,
+			    placeholder: 'Search for products',
+	  		});
+    	};
+    	
+		$(document).ready(function() {
+		  $('#dropdown').on('select2:select', function(e) {
+		    let selected = e.params.data;
+		    if (!selectedOptions.includes(selected.text) && selected.id != 0) {
+		        selectedOptions.push(selected.text);
+		        addToTable(selected);
+		    }
+		  });
+	
+		  $('#selectedTable').on('click', '.delete-btn', function() {
+		    let removed = $(this).data('option');
+		    selectedOptions.splice(selectedOptions.indexOf(removed), 1);
+		    $(this).closest('tr').remove();
+		    total-=$(this).data('price');
+		    updatePrice();
+		  });
+		  
+		  $("#tableArea").on("change", ".soluong", function() {
+  			 total -= $(this).data('price')
+			  total += $(this).val()*$(this).data('price')
+			  updatePrice()
+			});
+		
+		});
+		
+		function updatePrice(){
+			$("#price").html("Tổng tiền: " +total);
+			$("#inputPrice").val(total);
+		}
+		
+		function addToTable(option) {
+		  let row = `
+		    <tr>
+		      <td>${option.text}</td>
+		      <td>${option.data}</td>
+		      <td><input type="number" name="soluong" data-price="${option.data}" value="1" class="soluong"></td>
+		      <td><button class="delete-btn" data-price="${option.data}" data-option="${option}">Xóa</button></td> 
+		      <td><input type="number" name="id" value="${option.id}" hidden></td>
+		    </tr>
+		  `;
+		  $('#selectedTable tbody').append(row);
+		  total+=option.data;
+		  updatePrice()
+		}
+	
+	</script>
+	<style>
+	    #dropdown{
+	        width: 300px;
+	    }
+	    table{
+			width: 50%;
+		}
+		input{
+			width:80px;
+		}
+		#tableArea{
+			height: 300px;
+		}
+		#addProduct{
+			margin: 30px;
+		}
+		#ngaynhap{
+			width: 200px;
+		}
+	</style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="right_col" role="main" style="min-height: 3288.8px;">
+			<div id="addProduct">
+				<h1>Tạo phiếu nhập hàng</h1>
+				<form method="post" th:action="@{/goods_receipt/save}" th:object="${phieu}">
+					<table>
+						<tr>
+							<td><label for="ngaynhap">Ngày nhập:</label></td>
+							<td><input type="datetime-local" id="ngaynhap" name="ngaynhap" th:field="*{ngaynhap}"></td>
+						</tr>
+						<tr>
+							<td><label for="trangthai">Trạng thái:</label></td>
+							<td><select th:field="*{trangthai}">
+									<option value="Hoàn thành">Hoàn thành</option>	
+									<option value="Chưa hoàn thành">Chưa hoàn thành</option>				
+								</select></td>
+						</tr>
+						<tr>
+							<td><label for="dropdown">Chọn sản phẩm</label></td>
+							<td><select id="dropdown"></select></td>
+						</tr>
+					</table>
+  					<div>
+              		</div>
+					<hr>
+					<div id="tableArea">
+						<table id="selectedTable">
+					  <thead>
+					    <tr>
+					      <th>Sản phẩm</th>
+					      <th>Đơn giá</th>
+					      <th>Số lượng</th>
+					      <th></th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  </tbody>
+					</table> 
+					</div>
+					<p id="price">Tổng tiền: 0</p>
+					<input type="number" id="inputPrice" name="total" th:field="*{tongtien}" hidden>
+					<hr>
+					<input type="submit" value="Tạo phiếu">
+				</form>
+				
+			</div>
+        </div>
+         <!-- JavaScript -->
+
+	    <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+	    <script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+	    <script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+	    <script th:src="@{/vendors/moment/min/moment.min.js}"></script>
+	    <script th:src="@{/vendors/bootstrap-daterangepicker/daterangepicker.js}"></script>
+	    <script th:src="@{/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js}"></script>
+	    <script th:src="@{/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js}"></script>
+	    <script th:src="@{/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js}"></script>
+	    <script th:src="@{/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js}"></script>
+	    <script th:src="@{/vendors/jquery-knob/dist/jquery.knob.min.js}"></script>
+	    <script th:src="@{/vendors/cropper/dist/cropper.min.js}"></script>
+    </div>
+
+   
+</body>
+</html>

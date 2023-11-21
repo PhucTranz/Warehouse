@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate = "~{mainlayout}">
 <head>
-     <!-- Bootstrap -->
+    <!-- Bootstrap -->
     <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -17,7 +17,6 @@
     <link th:href="@{/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
     <link th:href="@{/stylesheets/custom.css}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <title>Danh sách đơn hàng</title>
@@ -63,16 +62,9 @@
                   <p class="text-muted font-13 m-b-30">
                     This is using for search, delete and update product
                   </p>
-					<label for="sizeFilter">Filter by Company:</label>
-				    <select id="sizeFilter">
-				    	<option value="">All</option>
-				        <option th:each="ncc : ${listNCC}" th:value="${ncc.tenncc}" th:text="${ncc.tenncc}"></option>
-				    </select>
 	                  <div
                     id="datatable-responsive_wrapper"
-                    class="dataTables_wrapper container-fluid dt-bootstrap no-footer"
-                  >
-                    
+                    class="dataTables_wrapper container-fluid dt-bootstrap no-footer">
                     <div class="row">
                       <div class="col-sm-12">
                         <table
@@ -125,19 +117,19 @@
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 20%;"
-                              >Đơn vị cung cấp</th>
+                              >Thao tác</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr th:each="supplier : ${listSupplier}" role="row" class="odd" th:data-barcode="${supplier.mancc}">
-                                <td th:text="${supplier.mancc}" th:class="'sorting_1 ' + ${supplier.mancc}" tabindex="0"></td>
-                                <td th:text="${supplier.tenncc}" th:class="${supplier.mancc}"></td>
-                                <td th:text="${supplier.diachi}" th:class="${supplier.mancc}"></td>
-                                <td th:text="${supplier.sdt}" th:class="${supplier.sdt}"></td>
+                            <tr th:each="i : ${list}" role="row" class="odd" th:data-barcode="${i.madonnhap}">
+                                <td th:text="${i.madonnhap}" th:class="'sorting_1 ' + ${i.madonnhap}" tabindex="0"></td>
+                                <td th:text="${i.ngaynhap}" th:class="${i.madonnhap}"></td>
+                                <td th:text="${i.tongtien}" th:class="${i.madonnhap}"></td>
+                                <td th:text="${i.trangthai}" th:class="${i.madonnhap}"></td>
                                 <td>
-                                    <button><a style="color:black;" th:href="'supplier/'+${supplier.mancc}">Details</a></button>
-                                    <button data-toggle="modal" data-target="#delSupplier" th:data="${supplier.mancc}" class="btn-delete-supplier">Delete</button>
-                                    <button data-toggle="modal" data-target="#editSupplierModal" th:id="${supplier.mancc}" class="btn-edit-supplier" th:onclick="'edSupplierForm('+${supplier.mancc}+')'">Edit</button>
+                                    <button><a style="color:black;" th:href="'supplier/'+${i.madonnhap}">Details</a></button>
+                                    <button data-toggle="modal" data-target="#delSupplier" th:data="${i.madonnhap}" class="btn-delete-supplier">Delete</button>
+                                    <button data-toggle="modal" data-target="#editSupplierModal" th:id="${i.madonnhap}" class="btn-edit-supplier" th:onclick="'edSupplierForm('+${i.madonnhap}+')'">Edit</button>
                                 </td>
                             </tr>
                         </tbody>
