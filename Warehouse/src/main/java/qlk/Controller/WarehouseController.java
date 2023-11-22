@@ -1,17 +1,31 @@
 package qlk.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qlk.Model.Kho;
+import qlk.Model.NhaCungCap;
+import qlk.Model.SanPham;
+import qlk.Model.SanPham_Kho;
 import qlk.Service.KhoService;
+import qlk.Service.SanPhamService;
+import qlk.Service.SanPham_KhoService;
 
 @Controller
 public class WarehouseController {
 
     @Autowired
     private KhoService khoService;
+    
+    @Autowired
+    private SanPham_KhoService spkService;
+    
+    @Autowired
+    private SanPhamService spService;
 
     @GetMapping("/warehouse")
     public String getAllKho(Model model) {
@@ -22,7 +36,20 @@ public class WarehouseController {
 
     @GetMapping("/warehouse/{id}")
     public String detailWarehouse(@PathVariable(name = "id") int id, Model model) {
+        List<SanPham> listP = new ArrayList<>();
+        List<NhaCungCap> listNCC = new ArrayList<>();
+        List<SanPham_Kho> spk = spkService.getByMaKho(id);
+        for(SanPham_Kho i : spk) {
+        	SanPham sp = spService.get(i.getSP_K().getMaSP());
+        	sp.setSoluong(i.getSoLuong());
+        	listP.add(sp);
+        	if(!listNCC.contains(sp.getNhaCungCap()))
+        		listNCC.add(sp.getNhaCungCap());
+        }
+        
         model.addAttribute("warehouse", khoService.get(id));
+        model.addAttribute("listP", listP);
+        model.addAttribute("listNCC", listNCC);
         return "warehouseDetails";
     }
 
