@@ -46,7 +46,7 @@ public class StockOutController {
         return "listDXH";
     }
     
-    @GetMapping("/goods_issue/create")
+    @GetMapping("/create_goods_issue")
     public String createGoodsRecrept(Model model, HttpServletRequest request) {
     	List<SanPham> list = new ArrayList<>();
     	int makho = nvkService.getByEmail(request.getUserPrincipal().getName()).getMakho();

@@ -38,9 +38,9 @@ public class WebSecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(requests -> requests
                 .antMatchers("/login", "/doLogout", "/loginerror").permitAll()
-                .antMatchers("/").hasAnyRole("NV", "ADMIN")
-//                .antMatchers("/").hasRole("ADMIN")
-                .antMatchers("/goods_receipt/create").hasRole("NV")
+                .antMatchers("/","/product/**", "/warehouse/**","/goods_receipt/{id}","/goods_issue/{id}").hasAnyRole("NV", "ADMIN")
+                .antMatchers("/supplier/**","/goods_receipt","/goods_issue").hasRole("ADMIN")
+                .antMatchers("/create_goods_receipt","/create_goods_issue").hasRole("NV")
                 .anyRequest().authenticated())
                 .formLogin(login -> login
                         .permitAll()

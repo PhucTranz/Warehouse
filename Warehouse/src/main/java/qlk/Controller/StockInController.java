@@ -46,7 +46,7 @@ public class StockInController {
         return "listDNH";
     }
     
-    @GetMapping("/goods_receipt/create")
+    @GetMapping("/create_goods_receipt")
     public String createGoodsRecrept(Model model) {
     	List<SanPham> list = sanphamService.listAll();
     	model.addAttribute("listP", list);

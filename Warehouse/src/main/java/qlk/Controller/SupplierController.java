@@ -42,13 +42,13 @@ public class SupplierController {
         }
     }
 
-    @RequestMapping("/add_supplier")
+    @RequestMapping("/supplier/add")
     public String addSupplier(Model model) {
         model.addAttribute("supplier", new NhaCungCap());
         return "createSupplier";
     }
 
-    @RequestMapping(value = "/update_supplier", method = RequestMethod.POST)
+    @RequestMapping(value = "/supplier/update", method = RequestMethod.POST)
     public String viewEditSupplier(@ModelAttribute("supplier") NhaCungCap ncc) {
         try {
 			NhaCungCap ncc_update = nhaCungCapService.get(ncc.getMancc());

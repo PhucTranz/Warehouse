@@ -56,7 +56,7 @@ public class ProductController {
 		return "redirect:/product";		
 	}
 	
-	@RequestMapping("/add_product")
+	@RequestMapping("/product/add")
 	public String addProduct(Model model) {
 		List<NhaCungCap> list = nhaCungCapService.listAll();
 		model.addAttribute("list", list);
@@ -64,7 +64,7 @@ public class ProductController {
 		return "createProduct";
 	}
 	
-	@RequestMapping(value = "/update_product", method = RequestMethod.POST)
+	@RequestMapping(value = "/product/update", method = RequestMethod.POST)
 	public String viewEditProduct(@ModelAttribute("product") SanPham p, 
 								@RequestParam("file") MultipartFile file) {
 		try {
@@ -96,7 +96,7 @@ public class ProductController {
 		return "redirect:/product";
 	}
 	
-	@RequestMapping(value = "/save_product", method = RequestMethod.POST)
+	@RequestMapping(value = "/product/save", method = RequestMethod.POST)
 	public String saveAccount(@ModelAttribute("product") SanPham sp, 
 								@RequestParam("file") MultipartFile file) {
 		if (file != null && !file.isEmpty()) {
