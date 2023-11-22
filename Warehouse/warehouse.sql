@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 20, 2023 lúc 02:02 PM
+-- Thời gian đã tạo: Th10 22, 2023 lúc 08:58 AM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.2.4
 
@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `warehouse`
 --
-
+CREATE DATABASE IF NOT EXISTS `warehouse` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `warehouse`;
 -- --------------------------------------------------------
 
 --
@@ -29,11 +30,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `donnhaphang` (
   `madonnhap` int(11) NOT NULL,
-  `ngaynhap` varchar(10) DEFAULT NULL,
+  `ngaynhap` datetime DEFAULT NULL,
   `trangthai` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `tongtien` int(11) DEFAULT NULL,
   `manv` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `donnhaphang`
+--
+
+INSERT INTO `donnhaphang` (`madonnhap`, `ngaynhap`, `trangthai`, `tongtien`, `manv`) VALUES
+(9, '2023-11-22 14:29:00', 'Hoàn thành', 41000000, 1),
+(10, '2023-11-22 14:29:00', 'Hủy', 11500000, 1);
 
 -- --------------------------------------------------------
 
@@ -43,11 +52,19 @@ CREATE TABLE `donnhaphang` (
 
 CREATE TABLE `donxuathang` (
   `madonxuat` int(11) NOT NULL,
-  `ngayxuat` varchar(10) DEFAULT NULL,
+  `ngayxuat` datetime DEFAULT NULL,
+  `diachi` varchar(100) NOT NULL,
   `trangthai` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `tongtien` int(11) DEFAULT NULL,
   `manv` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `donxuathang`
+--
+
+INSERT INTO `donxuathang` (`madonxuat`, `ngayxuat`, `diachi`, `trangthai`, `tongtien`, `manv`) VALUES
+(1, '2023-11-22 14:38:00', '339, Nguyễn Thị Thập, Quận 7', 'Hủy', 8700000, 1);
 
 -- --------------------------------------------------------
 
@@ -164,8 +181,8 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`masp`, `tensp`, `hinhanh`, `mau`, `size`, `soluong`, `ngaysx`, `gia`, `mancc`) VALUES
-(1, 'Biti\'s Hunter X Wavy', 'img1.jpeg', 'Xám Trắng', 42, 12, '23/11/2022', 1800000, 1),
-(3, 'Biti\'s Hunter Running', 'img3.jpeg', 'Xanh', 40, 7, '23/11/2022', 2300000, 1);
+(1, 'Biti\'s Hunter X Wavy', 'img1.jpeg', 'Xám Trắng', 42, 10, '23/11/2022', 1800000, 1),
+(3, 'Biti\'s Hunter Running', 'img3.jpeg', 'Xanh', 40, 10, '23/11/2022', 2300000, 1);
 
 -- --------------------------------------------------------
 
@@ -178,6 +195,14 @@ CREATE TABLE `sanpham_kho` (
   `makho` int(11) NOT NULL,
   `soluong` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `sanpham_kho`
+--
+
+INSERT INTO `sanpham_kho` (`masp`, `makho`, `soluong`) VALUES
+(1, 1, 10),
+(3, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -192,6 +217,15 @@ CREATE TABLE `sanpham_nhaphang` (
   `gia` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `sanpham_nhaphang`
+--
+
+INSERT INTO `sanpham_nhaphang` (`madonnhap`, `masp`, `soluong`, `gia`) VALUES
+(9, 1, 10, 1800000),
+(9, 3, 10, 2300000),
+(10, 3, 5, 2300000);
+
 -- --------------------------------------------------------
 
 --
@@ -204,6 +238,14 @@ CREATE TABLE `sanpham_xuathang` (
   `soluong` int(11) DEFAULT NULL,
   `gia` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `sanpham_xuathang`
+--
+
+INSERT INTO `sanpham_xuathang` (`madonxuat`, `masp`, `soluong`, `gia`) VALUES
+(1, 1, 1, 1800000),
+(1, 3, 3, 2300000);
 
 -- --------------------------------------------------------
 
@@ -312,13 +354,13 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT cho bảng `donnhaphang`
 --
 ALTER TABLE `donnhaphang`
-  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `donxuathang`
 --
 ALTER TABLE `donxuathang`
-  MODIFY `madonxuat` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `madonxuat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `kho`
@@ -354,7 +396,7 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT cho bảng `sanpham_nhaphang`
 --
 ALTER TABLE `sanpham_nhaphang`
-  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

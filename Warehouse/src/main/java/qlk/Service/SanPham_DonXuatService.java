@@ -31,4 +31,8 @@ public class SanPham_DonXuatService {
 	public void delete(SP_XH_id id) {
 		repo.deleteById(id);
 	}
+	
+	public List<SanPham_DonXuat> getByMaDX(int madx){
+		return repo.findByMDX(madx);
+	}
 }

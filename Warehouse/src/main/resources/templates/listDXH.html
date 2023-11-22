@@ -89,16 +89,9 @@
                                 aria-controls="datatable-responsive"
                                 rowspan="1"
                                 colspan="1"
-                                style="width: 25%;"
+                                style="width: 15%;"
                                 aria-label="Office: activate to sort column ascending"
-                              >Ngày nhập</th>
-                              <th
-                                tabindex="0"
-                                aria-controls="datatable-responsive"
-                                rowspan="1"
-                                colspan="1"
-                                style="width: 25%;"
-                              >Tổng tiền</th>
+                              >Ngày xuất</th>
                               <th
                                 class="sorting"
                                 tabindex="0"
@@ -106,6 +99,22 @@
                                 rowspan="1"
                                 colspan="1"
                                 style="width: 25%;"
+                                aria-label="Office: activate to sort column ascending"
+                              >Địa chỉ</th>
+                              <th
+                                tabindex="0"
+                                aria-controls="datatable-responsive"
+                                rowspan="1"
+                                colspan="1"
+                                style="width: 15%;"
+                              >Tổng tiền</th>
+                              <th
+                                class="sorting"
+                                tabindex="0"
+                                aria-controls="datatable-responsive"
+                                rowspan="1"
+                                colspan="1"
+                                style="width: 20%;"
                               >Trạng thái</th>
                               <th
                                 tabindex="0"
@@ -117,13 +126,14 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr th:each="i : ${list}" role="row" class="odd" th:data-barcode="${i.madonnhap}">
-                                <td th:text="${i.madonnhap}" th:class="'sorting_1 ' + ${i.madonnhap}" tabindex="0"></td>
-                                <td th:text="${i.ngaynhap}" th:class="${i.madonnhap}"></td>
-                                <td th:text="${i.tongtien}" th:class="${i.madonnhap}"></td>
-                                <td th:text="${i.trangthai}" th:class="${i.madonnhap}"></td>
+                            <tr th:each="i : ${list}" role="row" class="odd" th:data-barcode="${i.madonxuat}">
+                                <td th:text="${i.madonxuat}" th:class="'sorting_1 ' + ${i.madonxuat}" tabindex="0"></td>
+                                <td th:text="${i.ngayxuat}" th:class="${i.madonxuat}"></td>
+                                <td th:text="${i.diachi}" th:class="${i.madonxuat}"></td>
+                                <td th:text="${i.tongtien}" th:class="${i.madonxuat}"></td>
+                                <td th:text="${i.trangthai}" th:class="${i.madonxuat}"></td>
                                 <td>
-                                    <button><a style="color:black;" th:href="'goods_receipt/'+${i.madonnhap}">Details</a></button>
+                                    <button><a style="color:black;" th:href="'/goods_issue/'+${i.madonxuat}">Details</a></button>
                                 </td>
                             </tr>
                         </tbody>

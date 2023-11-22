@@ -35,4 +35,8 @@ public class SanPham_KhoService {
 	public void delete(SP_K_id id) {
 		repo.deleteById(id);
 	}
+	
+	public List<SanPham_Kho> getByMaKho(int mk){
+		return repo.findByMK(mk);
+	}
 }

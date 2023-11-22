@@ -16,6 +16,7 @@ public class DonXuatHang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int madonxuat;
 	private String ngayxuat;
+	private String diachi;
 	private String trangthai;
 	private int tongtien;
 	private int manv;

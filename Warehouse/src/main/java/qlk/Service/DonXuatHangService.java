@@ -30,4 +30,9 @@ public class DonXuatHangService {
 	public void delete(int id) {
 		repo.deleteById(id);
 	}
+	
+	public DonXuatHang getLastItem() {
+		List<DonXuatHang> listDXH = repo.findAll();
+		return listDXH.get(listDXH.size()-1);
+	}
 }

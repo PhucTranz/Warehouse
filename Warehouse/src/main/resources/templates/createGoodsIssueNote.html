@@ -31,7 +31,7 @@
 			var listP = /*[[${listP}]]*/ []; 
 			/*]]>*/
 			for(let i = 0; i< listP.length; i++){
-				options.push({id: listP[i].masp, text: listP[i].masp+"--"+listP[i].tensp+"--"+listP[i].size+"--"+listP[i].mau, data: listP[i].gia})
+				options.push({id: listP[i].masp, text: listP[i].masp+"--"+listP[i].tensp+"--"+listP[i].size+"--"+listP[i].mau, data: listP[i].gia, soluong:listP[i].soluong})
 			}
 			
 			$('#dropdown').select2({
@@ -75,7 +75,7 @@
 		    <tr>
 		      <td>${option.text}</td>
 		      <td>${option.data}</td>
-		      <td><input type="number" name="soluong" data-price="${option.data}" value="1" class="soluong"></td>
+		      <td><input type="number" name="soluong" data-price="${option.data}" max="${option.soluong}" value="1" class="soluong"></td>
 		      <td><button class="delete-btn" data-price="${option.data}" data-option="${option}">Xóa</button></td> 
 		      <td><input type="number" name="id" value="${option.id}" hidden></td>
 		    </tr>
@@ -102,8 +102,11 @@
 		#addProduct{
 			margin: 30px;
 		}
-		#ngaynhap{
+		#ngayxuat{
 			width: 200px;
+		}
+		#diachi{
+			width: 50%
 		}
 	</style>
 </head>
@@ -111,12 +114,12 @@
     <div layout:fragment="content">
         <div class="right_col" role="main" style="min-height: 3288.8px;">
 			<div id="addProduct">
-				<h1>Tạo phiếu nhập hàng</h1>
-				<form method="post" th:action="@{/goods_receipt/save}" th:object="${phieu}">
+				<h1>Tạo phiếu xuất hàng</h1>
+				<form method="post" th:action="@{/goods_issue/save}" th:object="${phieu}">
 					<table>
 						<tr>
-							<td><label for="ngaynhap">Ngày nhập:</label></td>
-							<td><input type="datetime-local" id="ngaynhap" name="ngaynhap" th:field="*{ngaynhap}"></td>
+							<td><label for="ngayxuat">Ngày xuất:</label></td>
+							<td><input type="datetime-local" id="ngayxuat" name="ngayxuat" th:field="*{ngayxuat}"></td>
 						</tr>
 						<tr>
 							<td><label for="trangthai">Trạng thái:</label></td>
@@ -124,6 +127,10 @@
 									<option value="Hoàn thành">Hoàn thành</option>	
 									<option value="Chưa hoàn thành">Chưa hoàn thành</option>				
 								</select></td>
+						</tr>
+						<tr>
+							<td><label for="diachi">Địa chỉ:</label></td>
+							<td><input type="text" id="diachi" name="diachi" th:field="*{diachi}"></td>
 						</tr>
 						<tr>
 							<td><label for="dropdown">Chọn sản phẩm</label></td>
