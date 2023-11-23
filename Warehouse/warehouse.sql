@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 22, 2023 lúc 08:58 AM
+-- Thời gian đã tạo: Th10 23, 2023 lúc 04:43 PM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.2.4
 
@@ -42,7 +42,10 @@ CREATE TABLE `donnhaphang` (
 
 INSERT INTO `donnhaphang` (`madonnhap`, `ngaynhap`, `trangthai`, `tongtien`, `manv`) VALUES
 (9, '2023-11-22 14:29:00', 'Hoàn thành', 41000000, 1),
-(10, '2023-11-22 14:29:00', 'Hủy', 11500000, 1);
+(10, '2023-11-22 14:29:00', 'Hủy', 11500000, 1),
+(11, '2023-11-22 15:25:00', 'Hoàn thành', 46900000, 1),
+(12, '2023-11-23 16:43:00', 'Hoàn thành', 23000000, 4),
+(13, '2023-11-23 22:40:00', 'Hoàn thành', 14000000, 1);
 
 -- --------------------------------------------------------
 
@@ -64,7 +67,11 @@ CREATE TABLE `donxuathang` (
 --
 
 INSERT INTO `donxuathang` (`madonxuat`, `ngayxuat`, `diachi`, `trangthai`, `tongtien`, `manv`) VALUES
-(1, '2023-11-22 14:38:00', '339, Nguyễn Thị Thập, Quận 7', 'Hủy', 8700000, 1);
+(1, '2023-11-22 14:38:00', '339, Nguyễn Thị Thập, Quận 7', 'Hủy', 8700000, 1),
+(2, '2023-11-22 15:01:00', '19 Nguyễn Hữu Thọ, Q7', 'Hoàn thành', 30600000, 1),
+(3, '2023-11-22 15:26:00', 'TP HCM', 'Hoàn thành', 4100000, 1),
+(4, '2023-11-22 23:25:00', '19 Nguyễn Hữu Thọ, Quận 7', 'Chưa hoàn thành', 10000000, 1),
+(5, '2023-11-23 16:44:00', '19 Nguyễn Hữu Thọ, Q7', 'Hoàn thành', 34500000, 4);
 
 -- --------------------------------------------------------
 
@@ -106,7 +113,7 @@ CREATE TABLE `nhacungcap` (
 INSERT INTO `nhacungcap` (`mancc`, `tenncc`, `diachi`, `sdt`) VALUES
 (1, 'Biti\'s', 'TP HCMm', '190046582'),
 (2, 'Nike', 'Hà Nội', '190056723'),
-(3, 'Adidas', 'TP HCM', '32133');
+(3, 'Adidas', 'TP HCM', '09364564');
 
 -- --------------------------------------------------------
 
@@ -132,7 +139,8 @@ CREATE TABLE `nhanvienkho` (
 --
 
 INSERT INTO `nhanvienkho` (`manv`, `hoten`, `ngaysinh`, `gioitinh`, `sdt`, `diachi`, `vitrilam`, `luong`, `email`, `makho`) VALUES
-(1, 'Nguyễn Trung Nghĩa', '28/05/2002', 'Nam', '0976578261', 'Cà Mau', 'NV Nhập kho', 20000000, 'phuc@gmail.com', 1);
+(1, 'Nguyễn Trung Nghĩa', '2022-02-20', 'Nữ', '0976578261', 'Cà Mau', 'NV Nhập kho', 20000000, 'nghia@gmail.com', 1),
+(4, 'Phúc Trần', '2002-11-23', 'Nam', '32133', '339, Nguyễn Thị Thập, Quận 7', 'Xuất kho', 123333, 'phuc@gmail.com', 3);
 
 -- --------------------------------------------------------
 
@@ -181,8 +189,9 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`masp`, `tensp`, `hinhanh`, `mau`, `size`, `soluong`, `ngaysx`, `gia`, `mancc`) VALUES
-(1, 'Biti\'s Hunter X Wavy', 'img1.jpeg', 'Xám Trắng', 42, 10, '23/11/2022', 1800000, 1),
-(3, 'Biti\'s Hunter Running', 'img3.jpeg', 'Xanh', 40, 10, '23/11/2022', 2300000, 1);
+(1, 'Biti\'s Hunter X Wavy', 'img1.jpeg', 'Xám Trắng', 42, 13, '23/11/2022', 1800000, 1),
+(3, 'Biti\'s Hunter Running', 'img2.jpeg', 'Xanh', 40, 23, '23/11/2022', 2300000, 1),
+(10, 'Adidas Pod 1', 'img3.jpeg', 'Đen', 45, 20, '21/12/2023', 1400000, 3);
 
 -- --------------------------------------------------------
 
@@ -201,8 +210,10 @@ CREATE TABLE `sanpham_kho` (
 --
 
 INSERT INTO `sanpham_kho` (`masp`, `makho`, `soluong`) VALUES
-(1, 1, 10),
-(3, 1, 10);
+(1, 1, 13),
+(3, 1, 18),
+(3, 3, 5),
+(10, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -224,7 +235,11 @@ CREATE TABLE `sanpham_nhaphang` (
 INSERT INTO `sanpham_nhaphang` (`madonnhap`, `masp`, `soluong`, `gia`) VALUES
 (9, 1, 10, 1800000),
 (9, 3, 10, 2300000),
-(10, 3, 5, 2300000);
+(10, 3, 5, 2300000),
+(11, 1, 12, 1800000),
+(11, 3, 11, 2300000),
+(12, 3, 10, 2300000),
+(13, 10, 10, 1400000);
 
 -- --------------------------------------------------------
 
@@ -245,7 +260,13 @@ CREATE TABLE `sanpham_xuathang` (
 
 INSERT INTO `sanpham_xuathang` (`madonxuat`, `masp`, `soluong`, `gia`) VALUES
 (1, 1, 1, 1800000),
-(1, 3, 3, 2300000);
+(1, 3, 3, 2300000),
+(2, 1, 5, 1800000),
+(3, 1, 1, 1800000),
+(3, 3, 1, 2300000),
+(4, 1, 3, 1800000),
+(4, 3, 2, 2300000),
+(5, 3, 5, 2300000);
 
 -- --------------------------------------------------------
 
@@ -264,8 +285,9 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`email`, `matkhau`, `role`) VALUES
-('admin@gmail.com', '$2a$10$NkmqvwcZG25yZbDkD5c5B.kV3xSGbqdXC1AzS57toNqsPdJ.LAxpm', 'ROLE_ADMIN'),
-('phuc@gmail.com', '$2a$10$NkmqvwcZG25yZbDkD5c5B.kV3xSGbqdXC1AzS57toNqsPdJ.LAxpm', 'ROLE_NV');
+('admin@gmail.com', '$2a$10$cAG.R6JxncADdYqzRWfGxex/95mj3q.6pOE2kTGxLNRL4UKb197QC', 'ROLE_ADMIN'),
+('nghia@gmail.com', '$2a$10$L88feF3xwRpSM5CL3Ds/YeTPHGn8X5UQQYOCA8gi3aPcmYgfiPpsS', 'ROLE_NV'),
+('phuc@gmail.com', '$2a$10$s7N0N9YOBLGQbc1q7cfbBOnvVDZj9mGgAmLOUoY1AM9aK7Jpq7eb.', 'ROLE_NV');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -354,13 +376,13 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT cho bảng `donnhaphang`
 --
 ALTER TABLE `donnhaphang`
-  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `donxuathang`
 --
 ALTER TABLE `donxuathang`
-  MODIFY `madonxuat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `madonxuat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `kho`
@@ -378,7 +400,7 @@ ALTER TABLE `nhacungcap`
 -- AUTO_INCREMENT cho bảng `nhanvienkho`
 --
 ALTER TABLE `nhanvienkho`
-  MODIFY `manv` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `manv` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `quanlykho`
@@ -390,13 +412,13 @@ ALTER TABLE `quanlykho`
 -- AUTO_INCREMENT cho bảng `sanpham`
 --
 ALTER TABLE `sanpham`
-  MODIFY `masp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `masp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `sanpham_nhaphang`
 --
 ALTER TABLE `sanpham_nhaphang`
-  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `madonnhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
