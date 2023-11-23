@@ -25,18 +25,30 @@
           var listSupplier = /*[[${list}]]*/ null;
           var supplier = listSupplier.find(e => e.manv === id);
           $('#mancc').val(supplier.manv);
-          $('#tenncc').val(supplier.hoten);
+          $('#hoten').val(supplier.hoten);
           $('#diachi').val(supplier.diachi);
           $('#sdt').val(supplier.sdt);
-          
+          $('#ngaysinh').val(supplier.ngaysinh);
+          $('#vitrilam').val(supplier.vitrilam);
+          $('#luong').val(supplier.luong);
+          $('#email').val(supplier.email);
+          if(supplier.gioitinh === "Nam")
+          	$('#nam').attr("checked","checked")
+          else
+          	$('#nu').attr("checked","checked")
+          	
           var x = document.getElementById("selectNcc");
+			while (x.firstChild) {
+			    x.removeChild(x.firstChild);
+			}
+
           var listNCC = /*[[${listKho}]]*/ null;
           listNCC.forEach(function(e){
               var option = document.createElement("option");
-              option.value=e.mancc;
+              option.value=e.makho;
               if(e.makho === supplier.makho)
                   option.selected='selected'
-              option.text = e.tenncc;
+              option.text = e.tenkho;
               x.add(option);
           })
       }
@@ -46,7 +58,7 @@
             $('#d-data').text("Are you sure to delete " + supplierName + "?");
     
             var supplierId = $(this).attr('data');
-            $('#delLink').attr('href', 'supplier/delete/' + supplierId);
+            $('#delLink').attr('href', 'staff/delete/' + supplierId);
             
             $('#delSupplier').modal('show');
         });
@@ -99,9 +111,9 @@
               <div class="col-sm-12">
                 <div class="card-box table-responsive">
                   <p class="text-muted font-13 m-b-30">
-                    This is using for search, delete and update product
+                    This is using for search, delete and update staff
                   </p>
-					<label for="sizeFilter">Filter by Company:</label>
+					<label for="sizeFilter">Filter:</label>
 				    <select id="sizeFilter">
 				    	<option value="">All</option>
 				        <option th:each="i : ${listKho}" th:value="${i.tenkho}" th:text="${i.tenkho}"></option>
@@ -217,7 +229,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="lable">Are you sure to delete this product?</h5>
+        <h5 class="modal-title" id="lable">Are you sure to delete this staff?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -251,17 +263,43 @@
                       <input type="number" class="form-control" th:field="*{manv}" required="required" readonly="readonly" id="mancc" name="mancc">
                   </div>
                   <div class="form-group">
-                      <label for="tenncc">Name</label>
-                      <input type="text" class="form-control" th:field="*{hoten}" id="tenncc" name="tenncc">
+                      <label for="tenncc">Họ tên</label>
+                      <input type="text" class="form-control" th:field="*{hoten}" id="hoten" name="tenncc">
                   </div>
                   <div class="form-group">
-                      <label for="diachi">Address</label>
+                      <label for="diachi">Ngày sinh</label>
+                      <input type="date" class="form-control" th:field="*{ngaysinh}" id="ngaysinh" name="diachi">
+                  </div>
+                   <div class="form-group">
+                   		<label for="diachi">Giới tính</label>
+                      <label for="diachi">Nam</label>
+                      <input type="radio" class="radio" th:field="*{gioitinh}" id="nam" value="Nam">
+                      <label for="diachi">Nữ</label>
+                      <input type="radio" class="radio" th:field="*{gioitinh}" id="nu" value="Nữ">
+                  </div>
+                  <div class="form-group">
+                      <label for="diachi">Địa chỉ</label>
                       <input type="text" class="form-control" th:field="*{diachi}" id="diachi" name="diachi">
                   </div>
                   <div class="form-group">
-                      <label for="sdt">Phone</label>
-                      <input type="number" class="form-control" th:field="*{sdt}" id="sdt" name="sdt">
+                      <label for="sdt">SĐT</label>
+                      <input type="text" class="form-control" th:field="*{sdt}" id="sdt" name="sdt">
                   </div>
+                  <div class="form-group">
+                      <label for="diachi">Vị trí làm</label>
+                      <input type="text" class="form-control" th:field="*{vitrilam}" id="vitrilam" name="diachi">
+                  </div>
+                  <div class="form-group">
+                      <label for="diachi">Lương</label>
+                      <input type="number" class="form-control" th:field="*{luong}" id="luong" name="diachi">
+                  </div>
+                   <div class="form-group">
+                      <label for="diachi">Email</label>
+                      <input type="email" class="form-control" th:field="*{email}" id="email" name="diachi">
+                  </div>
+                  <label for="created">Kho</label>
+            		<select class="select2_multiple form-control" name="category" id="selectNcc" th:field="*{makho}">
+            	</select>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

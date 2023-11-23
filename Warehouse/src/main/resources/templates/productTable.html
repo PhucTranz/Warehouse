@@ -62,6 +62,9 @@
 			$('#image-preview').attr('src','/images/'+product.hinhanh)
 			
 			var x = document.getElementById("selectNcc");
+			while (x.firstChild) {
+			    x.removeChild(x.firstChild);
+			}
 			var listNCC = /*[[${listNCC}]]*/ null;
 			listNCC.forEach(function(e){
 				var option = document.createElement("option");

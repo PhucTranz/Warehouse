@@ -6019,51 +6019,6 @@ $(document).ready(function () {
 });
 
 
-
-$(document).ready(function () {
-    $('#addProductForm').submit(function (event) {
-        event.preventDefault();
-        const fileInput = document.getElementById('formFileFromCreateProduct').files[0];
-
-        if (fileInput) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const image = new Image();
-                image.src = e.target.result;
-
-                image.onload = function () {
-                    // Tạo một canvas để vẽ lại ảnh với chất lượng giảm
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = image.width;
-                    canvas.height = image.height;
-
-                    // Vẽ lại ảnh với chất lượng giảm
-                    ctx.drawImage(image, 0, 0, image.width, image.height);
-
-                    // Lấy dữ liệu ảnh với chất lượng giảm
-                    const base64Image = canvas.toDataURL('image/jpeg', 0.2); // Chỉnh số 0.7 cho chất lượng mong muốn
-                    if (base64Image && base64Image.length > 0) {
-                        // Đặt giá trị vào trường ẩn
-                        $('<input>').attr({
-                            type: 'hidden',
-                            name: 'base64Image',
-                            value: base64Image
-                        }).appendTo('#addProductForm');
-                        
-                        // Gỡ bỏ sự kiện submit và gửi lại form
-                        $('#addProductForm').unbind('submit').submit();
-                    } else {
-                        // Xử lý khi không thể lấy mã Base64, ví dụ:
-                        alert('Do not support this file, please choose image raw');
-                    }
-                };
-            };
-            reader.readAsDataURL(fileInput);
-        }
-    });
-});
-
 $(document).ready(function () {
     $('#registration-form').on('submit', function (event) {
         event.preventDefault();

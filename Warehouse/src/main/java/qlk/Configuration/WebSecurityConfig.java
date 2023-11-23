@@ -39,7 +39,7 @@ public class WebSecurityConfig{
         http.authorizeRequests(requests -> requests
                 .antMatchers("/login", "/doLogout", "/loginerror").permitAll()
                 .antMatchers("/","/product/**", "/warehouse/**","/goods_receipt/{id}","/goods_issue/{id}").hasAnyRole("NV", "ADMIN")
-                .antMatchers("/supplier/**","/goods_receipt","/goods_issue").hasRole("ADMIN")
+                .antMatchers("/supplier/**","/goods_receipt","/goods_issue", "/staff/**").hasRole("ADMIN")
                 .antMatchers("/create_goods_receipt","/create_goods_issue").hasRole("NV")
                 .anyRequest().authenticated())
                 .formLogin(login -> login

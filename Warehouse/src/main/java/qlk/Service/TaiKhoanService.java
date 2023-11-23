@@ -23,11 +23,11 @@ public class TaiKhoanService {
 		repo.save(e);
 	}
 	
-//	public TaiKhoan get(int id) {
-//		return repo.find(id).get();
-//	}
+	public TaiKhoan get(String email) {
+		return repo.getUserByEmail(email);
+	}
 	
-//	public void delete(int id) {
-//		repo.deleteById(id);
-//	}
+	public void delete(String email) {
+		repo.deleteById(email);
+	}
 }
